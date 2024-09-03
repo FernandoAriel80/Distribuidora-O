@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Sleep;
-use Inertia\Inertia;
+//use Illuminate\Support\Sleep;
+//use Inertia\Inertia;
 
 /*Route::get('/', function (){
 	//Sleep(1);
@@ -10,4 +11,5 @@ use Inertia\Inertia;
 })->name('home');*/
 Route::inertia('/','Home')->name('home');
 
-Route::inertia('/about','About')->name('about');
+Route::inertia('/register','Auth/Register')->name('register');
+Route::post('/register',[AuthController::class,'register']);

@@ -4,8 +4,8 @@
 </script>
 <template>
    
-    <Head title="Home"/>
+    <Head title="Inicio"/>
    <div>
-      <h1>Home</h1>
+      <h1>Inicio</h1>
    </div>
 </template>
