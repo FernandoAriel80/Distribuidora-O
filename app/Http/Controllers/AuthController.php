@@ -33,16 +33,25 @@ class AuthController extends Controller
     {
         sleep(1);
         $validated = $request->validate([
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:8',
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
         
-        $user = User::create([
+        if(Auth::attempt($validated, $request->remember)){
+            $request->session()->regenerate();
+            return redirect()->intended('/');
+        }
+     
+        return back()->withErrors([
+            'email' => 'Los datos no coinciden.',
+        ])->onlyInput('email');
+    }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        ]);
-        
-        Auth::login($user);
-
-        return redirect()->route('home');
+        return redirect('/');
     }
 }

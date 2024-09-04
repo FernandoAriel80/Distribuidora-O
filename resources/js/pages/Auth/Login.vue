@@ -6,10 +6,13 @@ import FormButton from '../Components/FormButton.vue';
 const form = useForm({
     email: null,
     password: null,
+    remeber: null,
 });
 
 const submit = () => {
-    form.post("register");
+    form.post("login"),{
+        onError: () => form.reset("password"),
+    };
 }; 
  
 </script>
@@ -22,6 +25,10 @@ const submit = () => {
             <div class="mb-6">
                 <TextInput name="Gmail" type="email" v-model="form.email" :message="form.errors.email" />
                 <TextInput name="Contraseña" type="password" v-model="form.password" :message="form.errors.password" />
+                <div>
+                    <input type="checkbox" v-model="form.remeber" id="remeber"/>
+                    <label for="remeber"> Recordar cuenta</label>
+                </div>
                 <div>
                     <p class="text-slate-600 mb-2">
                         aun no tenes cuenta? <a href="/register" class="text-link text-blue-400">Registrate </a>
