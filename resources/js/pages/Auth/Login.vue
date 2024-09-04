@@ -4,37 +4,29 @@ import TextInput from '../Components/TextInput.vue';
 import FormButton from '../Components/FormButton.vue';
 
 const form = useForm({
-    name: null,
     email: null,
     password: null,
-    password_confirmation: null,
 });
 
 const submit = () => {
-    form.post("register", {
-        onError: () => form.reset("password", "password_confirmation"),
-    });
+    form.post("register");
 }; 
  
 </script>
 
 <template>
-
-    <Head title="Registro" />
+    <Head title="Login" />
     <div class="w-2/5 mx-auto">
         <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md">
-            <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Registrarse</label>
+            <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Inicia Sesión</label>
             <div class="mb-6">
-                <TextInput name="Nombre" v-model="form.name" :message="form.errors.name"/>
                 <TextInput name="Gmail" type="email" v-model="form.email" :message="form.errors.email" />
                 <TextInput name="Contraseña" type="password" v-model="form.password" :message="form.errors.password" />
-                <TextInput name="Confirmar Contraseña" type="password" v-model="form.password_confirmation" :message="form.errors.password_confirmation" />
-
                 <div>
                     <p class="text-slate-600 mb-2">
-                        ya tienes cuenta? <a href="/login" class="text-link text-blue-400">Iniciar Sesión </a>
+                        aun no tenes cuenta? <a href="/register" class="text-link text-blue-400">Registrate </a>
                     </p>
-                   <FormButton :name="'Registrarse'" :progress="form.progress" />
+                   <FormButton :name="'Iniciar Sesión'" :progress="form.progress" />
                 </div>
             </div>
         </form>

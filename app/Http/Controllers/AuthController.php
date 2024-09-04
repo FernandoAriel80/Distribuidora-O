@@ -29,4 +29,20 @@ class AuthController extends Controller
         return redirect()->route('home');
     }
 
+    public function login(Request $request)
+    {
+        sleep(1);
+        $validated = $request->validate([
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|confirmed|min:8',
+        ]);
+        
+        $user = User::create([
+
+        ]);
+        
+        Auth::login($user);
+
+        return redirect()->route('home');
+    }
 }

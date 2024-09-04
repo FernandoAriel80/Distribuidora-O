@@ -11,7 +11,7 @@
                 </div>
                 <div class="space-x-6">
                     <Link href="/">Inicio</Link>
-                    <Link href="/about"> About</Link>
+                    <Link href="/login"> Iniciar Sesión</Link>
                     <Link href="/register"> Registro</Link>
                 </div>
             </nav>
