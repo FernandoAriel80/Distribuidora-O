@@ -1,6 +1,7 @@
 <script setup>
 import { router, useForm } from '@inertiajs/vue3';
 import TextInput from '../Components/TextInput.vue';
+import FormButton from '../Components/FormButton.vue';
 const form = useForm({
     name: null,
     email: null,
@@ -12,7 +13,6 @@ const submit = () => {
     form.post("register", {
         onError: () => form.reset("password", "password_confirmation"),
     });
-   // return { form, submit };
 }; 
  
 
@@ -33,9 +33,9 @@ const submit = () => {
 
                 <div>
                     <p class="text-slate-600 mb-2">
-                        ya tienes usuario? <a href="/" class="text-link">Iniciar Sesion</a>
+                        ya tienes usuario? <a href="/" class="text-link text-blue-400">Iniciar Sesión </a>
                     </p>
-                    <button class="primary-btn flex w-full justify-center rounded-md bg-green-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500 disabled:bg-gray-400 disabled:cursor-not-allowed" :disabled="form.progress">Registrarse</button>
+                   <FormButton :name="'Registrarse'" :progress="form.progress" />
                 </div>
             </div>
         </form>
