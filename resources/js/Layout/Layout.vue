@@ -7,7 +7,7 @@
             <nav class="flex items-center justify-between p-4 max-w-screen-lg 
             mx-auto">
                 <div>
-                    <h1 class="title"> {{ $page.props.auth.user }}</h1>
+                    <h1 class="title"> {{ $page.props.auth.user.name }}</h1>
                 </div>
                 <div class="space-x-6">
                     <Link href="/">Inicio</Link>

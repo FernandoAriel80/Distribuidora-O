@@ -7,30 +7,25 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
+   
     public function register(Request $request)
     {
         sleep(1);
-
-        $filds = $request->validate([
-            'name' =>['required', 'max:255'],
-            'email' => ['required', 'email','max:255','unique:user'],
-            'password' => ['required', 'conformed']
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|confirmed|min:8',
         ]);
-
-        //register
-
-        $user = User::create($filds);
+        
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password']),
+            'rol' => 'usuario',
+        ]);
         
         Auth::login($user);
-        
+
         return redirect()->route('home');
     }
 
