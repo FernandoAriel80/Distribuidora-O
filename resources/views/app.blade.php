@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <link rel="shortcut icon" type="image/png" href="{{ asset('') }}"> {{-- ahi va el icono --}}
+    <link rel="shortcut icon" type="image/png" href="{{ asset('/img/favicon_192x192.png') }}"> {{-- /img/favicon_192x192.png --}}
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
     @inertiaHead

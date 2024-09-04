@@ -21,6 +21,7 @@ const submit = () => {
 <template>
 
     <Head title="Registro" />
+
     <div class="w-2/5 mx-auto">
         <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md">
             <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Registrarse</label>
