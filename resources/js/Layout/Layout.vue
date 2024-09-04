@@ -16,6 +16,10 @@
                     type="button"
                     class="nav-link"
                     > Cerrar Sesión</Link>
+                    <div v-if="$page.props.auth.user.rol === 'admin'">
+                        <Link href="/create"> Administración </Link> 
+                    </div>
+                    
                 </div>
                 <div class="space-x-6 ml-auto" v-else>
                     <Link href="/">Inicio</Link>
