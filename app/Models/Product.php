@@ -19,6 +19,7 @@ class Product extends Model
         'unit_price',
         'percent_off',
         'offer',
+        'price_offer',
         'stock',
         'image_url',
         'category_id',

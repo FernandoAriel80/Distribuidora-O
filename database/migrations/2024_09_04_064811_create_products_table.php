@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('unit_price', 10, 2);
             $table->integer('percent_off')->nullable();
             $table->boolean('offer');
+            $table->decimal('price_offer', 10, 2)->nullable();
             $table->boolean('stock');
             $table->string('image_url');
             $table->unsignedBigInteger('category_id')->nullable(); 

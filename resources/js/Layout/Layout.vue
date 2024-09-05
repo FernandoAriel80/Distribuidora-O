@@ -5,7 +5,9 @@
     <div>
         <header class="bg-green-500 text-white">
             <nav class="flex items-center justify-between p-4 max-w-screen-lg mx-auto">
-                <!-- v-if="$page.props.auth.user.rol === 'usuario'" -->
+                <div class="">
+                    <h1>LOGO</h1>
+                </div> 
                 <div class="flex space-x-6 ml-auto" v-if="$page.props.auth.user" >
                     <Link href="/">Inicio</Link>
                     <h1 class="title"> {{ $page.props.auth.user.name }}</h1>
@@ -24,7 +26,7 @@
                 <div class="space-x-6 ml-auto" v-else>
                     <Link href="/">Inicio</Link>
                     <Link href="/login"> Iniciar Sesión</Link>
-                    <Link href="/register"> Registro</Link>    
+                    <!-- <Link href="/register"> Registro</Link>     -->
                 </div> 
             </nav>
         </header>
