@@ -22,8 +22,8 @@ const submit = () => {
 
     <Head title="Registro" />
 
-    <div class="w-2/5 mx-auto">
-        <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md">
+    <div class="min-h-screen flex items-center justify-center">
+        <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md w-full">
             <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Registrarse</label>
             <div class="mb-6">
                 <TextInput name="Nombre" v-model="form.name" :message="form.errors.name"/>

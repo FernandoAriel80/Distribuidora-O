@@ -16,27 +16,25 @@ const submit = () => {
 }; 
  
 </script>
-
 <template>
     <Head title="Login" />
-    <div class="w-2/5 mx-auto">
-        <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md">
+    <div class="min-h-screen flex items-center justify-center"> 
+        <form @submit.prevent="submit" class="p-6 rounded-md ring-1 ring-slate-300 max-w-md w-full">
             <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Inicia Sesión</label>
             <div class="mb-6">
                 <TextInput name="Gmail" type="email" v-model="form.email" :message="form.errors.email" />
                 <TextInput name="Contraseña" type="password" v-model="form.password" :message="form.errors.password" />
                 <div>
-                    <input type="checkbox" v-model="form.remeber" id="remeber"/>
-                    <label for="remeber"> Recordar cuenta</label>
+                    <input type="checkbox" v-model="form.remember" id="remember"/>
+                    <label for="remember"> Recordar cuenta</label>
                 </div>
                 <div>
                     <p class="text-slate-600 mb-2">
-                        aun no tenes cuenta? <a href="/register" class="text-link text-blue-400">Registrate </a>
+                        aun no tienes cuenta? <a href="/register" class="text-link text-blue-400">Registrate </a>
                     </p>
-                   <FormButton :name="'Iniciar Sesión'" :progress="form.progress" />
+                    <FormButton :name="'Iniciar Sesión'" :progress="form.progress" />
                 </div>
             </div>
         </form>
-
     </div>
 </template>

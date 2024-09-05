@@ -39,7 +39,7 @@ class AuthController extends Controller
         
         if(Auth::attempt($validated, $request->remember)){
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->route('home');
         }
      
         return back()->withErrors([
@@ -52,6 +52,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('home');
     }
 }
