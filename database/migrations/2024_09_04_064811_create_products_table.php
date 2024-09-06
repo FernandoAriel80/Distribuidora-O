@@ -16,8 +16,8 @@ return new class extends Migration
             $table->integer('catalog_id')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->decimal('bulk_unit_price', 10, 2);
-            $table->decimal('unit_price', 10, 2);
+            $table->decimal('bulk_unit_price', 10, 2)->nullable();
+            $table->decimal('unit_price', 10, 2)->nullable();
             $table->integer('percent_off')->nullable();
             $table->boolean('offer');
             $table->decimal('price_offer', 10, 2)->nullable();
