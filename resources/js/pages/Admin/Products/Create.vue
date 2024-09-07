@@ -12,17 +12,17 @@ const form = useForm({
     bulk_unit_price: null,
     unit_price: null,
     percent: null,
-    isOffer: false,
+    isOffer: null,
     price_offer: null,
     stock: null,
     image_url: null,
     category_id: null,
     type_id: null,
+    type_name: null,
     iskg: false,
 
 });
 
-console.log(form);
 const props = defineProps({
     categories: {
         type: Object,
@@ -33,7 +33,6 @@ const props = defineProps({
         required: true,
     },
 });
-console.log(props);
 
 const submit = () => {
     /*  form.post("register", {
@@ -69,10 +68,10 @@ const submit = () => {
                 <formSelect name="Undiad de medida" v-model="form.type_id" :datas="props.types" />
                 <formSelect name="Seleccione Categoria" v-model="form.category_id" :datas="props.categories" />
 
-                <div v-if="form.iskg">
-                    <TextInput name="Precio por kg" v-model="form.unit_price" :message="form.errors.unit_price" />
-                </div>
-                <div v-else-if="!form.isOffer">
+               <!--  <div v-if="form.type_id == '2'">
+                    <TextInput name="Precio por " v-model="form.unit_price" :message="form.errors.unit_price" />
+                </div> -->
+                <div v-if="!form.isOffer">
                     <TextInput name="Precio por unidad" v-model="form.unit_price" :message="form.errors.unit_price" />
                     <TextInput name="Precio unico por bulto" v-model="form.bulk_unit_price"
                         :message="form.errors.bulk_unit_price" />
@@ -80,7 +79,7 @@ const submit = () => {
                 <div v-if="form.isOffer" :v-model="form.iskg = false">
                     <TextInput name="Porcentaje de descuento (no obligatorio)" v-model="form.percent"
                         :message="form.errors.percent" />
-                    <TextInput name="Precio oferta (sea unidad o por kg)" v-model="form.price_offer"
+                    <TextInput name="Precio oferta" v-model="form.price_offer"
                         :message="form.errors.price_offer" />
 
                 </div>
@@ -93,7 +92,7 @@ const submit = () => {
                         border border-gray-300 rounded-md shadow-sm
                       focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         placeholder="Escribe aquí una descripción detallada..."></textarea>
-                    <small class="error" v-if="message">{{ form.errors.description }}</small>
+                    <small class="error" v-if="form.errors.price_offer">{{ form.errors.description }}</small>
                 </div>
 
                 <div class="flex flex-col space-y-2 m-1">
