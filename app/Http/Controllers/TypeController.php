@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Type;
+use Inertia\Inertia;
 
 class TypeController extends Controller
 {
@@ -11,7 +13,9 @@ class TypeController extends Controller
      */
     public function index()
     {
-        //
+        $types = Type::all(['id','name']);
+        return Inertia::render('Admin/Types/index',compact('types'));
+        /* return Inertia::render('Admin/Types/index',['types' =>$types]); */
     }
 
     /**

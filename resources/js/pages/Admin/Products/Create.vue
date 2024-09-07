@@ -2,6 +2,7 @@
 import { useForm } from '@inertiajs/vue3';
 import TextInput from '../../Components/TextInput.vue';
 import FormButton from '../../Components/FormButton.vue';
+import formSelect from '../../Components/formSelect.vue';
 import { defineProps } from 'vue';
 
 const form = useForm({
@@ -11,27 +12,34 @@ const form = useForm({
     bulk_unit_price: null,
     unit_price: null,
     percent: null,
-    offer: null,
+    isOffer: false,
     price_offer: null,
     stock: null,
     image_url: null,
+    category_id: null,
     type_id: null,
     iskg: false,
-    isOffer: false,
+
 });
 
+console.log(form);
 const props = defineProps({
-  categories: {
-    type: Array,
-    required: true
-  }
+    categories: {
+        type: Object,
+        required: true
+    },
+    types:{
+        type: Object,
+        required: true,
+    },
 });
-
+console.log(props);
 
 const submit = () => {
     /*  form.post("register", {
          onError: () => form.reset("password", "password_confirmation"),
      }); */
+     console.log(props);
 };
 
 </script>
@@ -51,22 +59,16 @@ const submit = () => {
                         <label for="offer"> ¿Esta en oferta?</label>
                         <input type="checkbox" id="offer" class="m-2" v-model="form.isOffer" />
                     </div>
-                    <div>
-                        <label for="kg"> ¿El precio es por kg?</label>
-                        <input type="checkbox" id="kg" class="m-2" v-model="form.iskg" />
-                    </div>
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                <TextInput name="ID producto" v-model="form.id_producto" :message="form.errors.id_producto" />
-                <TextInput name="Nombre producto" v-model="form.nombre_producto"
-                    :message="form.errors.nombre_producto" />
-                <div>
-                    <label for="kg"> Tipo de categoria</label>
-                    <ul>
-                        <li>Coffee</li>
-                    </ul>
-                </div>
+                <TextInput name="ID producto" v-model="form.catalog_id" :message="form.errors.catalog_id" />
+                <TextInput name="Nombre producto" v-model="form.name" :message="form.errors.name" />
+              
+
+                <formSelect name="Undiad de medida" v-model="form.type_id" :datas="props.types" />
+                <formSelect name="Seleccione Categoria" v-model="form.category_id" :datas="props.categories" />
+
                 <div v-if="form.iskg">
                     <TextInput name="Precio por kg" v-model="form.unit_price" :message="form.errors.unit_price" />
                 </div>
@@ -76,9 +78,10 @@ const submit = () => {
                         :message="form.errors.bulk_unit_price" />
                 </div>
                 <div v-if="form.isOffer" :v-model="form.iskg = false">
-                    <TextInput name="Porcentaje de descuento (no obligatorio)" v-model="form.descuento"
-                        :message="form.errors.descuento" />
-                    <TextInput name="Precio oferta (sea unidad o por kg)" v-model="form.precio_oferta" :message="form.errors.precio_oferta" />
+                    <TextInput name="Porcentaje de descuento (no obligatorio)" v-model="form.percent"
+                        :message="form.errors.percent" />
+                    <TextInput name="Precio oferta (sea unidad o por kg)" v-model="form.price_offer"
+                        :message="form.errors.price_offer" />
 
                 </div>
             </div>
@@ -86,15 +89,16 @@ const submit = () => {
 
                 <div class="m-1">
                     <label class="block text-sm font-medium leading-6 text-slate-900">Descripcion</label>
-                    <textarea id="largeText" v-model="text" rows="6" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm
-                         focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    <textarea id="largeText" v-model="form.description" rows="6" class="mt-1 block w-full p-2 
+                        border border-gray-300 rounded-md shadow-sm
+                      focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         placeholder="Escribe aquí una descripción detallada..."></textarea>
-                    <small class="error" v-if="message">{{ form.errors.precio_bulto }}</small>
+                    <small class="error" v-if="message">{{ form.errors.description }}</small>
                 </div>
 
                 <div class="flex flex-col space-y-2 m-1">
-                    <label for="foto" class="text-sm font-medium text-gray-700">Foto producto</label>
-                    <input type="file" id="foto" @input="change"
+                    <label for="image" class="text-sm font-medium text-gray-700">Foto producto</label>
+                    <input type="file" id="image" @input="change"
                         class="text-sm p-2 border border-gray-300 rounded-md" />
                 </div>
 
