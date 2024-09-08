@@ -39,7 +39,7 @@ class ProductController extends Controller
 
         //sleep(1);
         
-      /*   $fields = $request->validate([
+         $fields = $request->validate([
             'catalog_id' => ['required', 'integer'],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -52,10 +52,10 @@ class ProductController extends Controller
             'image_url' =>  ['nullable', 'image', 'max:300'],
             'category_id' => ['required', 'integer'],
             'type_id' => ['required', 'integer'],
-       ]);   */  
-       /* 
-       'category_id' => ['required', 'integer', 'exists:categories,id'],
-       'type_id' => ['required', 'integer', 'exists:types,id'],
+       ]);    
+       
+       /* 'category_id' => ['required', 'integer', 'exists:categories,id'],
+       'type_id' => ['required', 'integer', 'exists:types,id'], */
        $fields['offer'] = $request->has('offer') ? $request->input('offer') : false;
        $fields['stock'] = $request->has('stock') ? $request->input('stock') : false; 
        
@@ -63,9 +63,9 @@ class ProductController extends Controller
        if($request->hasFile('image')){
            $fields['image'] = Storage::disk('public')->put('images',$request->image);
        }
- */
+ 
      
-        Product::create($request->all());
+        Product::create($fields);
 
        // Retornar alguna respuesta, puede ser una redirección o mensaje
     
