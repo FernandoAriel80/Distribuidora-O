@@ -6,7 +6,7 @@ defineProps({
     },
     progress: {
         type: Boolean,
-        required: true,
+       // required: true,
     },
 });
 </script>

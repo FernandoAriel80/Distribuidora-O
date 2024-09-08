@@ -22,7 +22,7 @@ return new class extends Migration
             $table->boolean('offer');
             $table->decimal('price_offer', 10, 2)->nullable();
             $table->boolean('stock');
-            $table->string('image_url');
+            $table->string('image_url')->nullable();
             $table->unsignedBigInteger('category_id')->nullable(); 
             $table->unsignedBigInteger('type_id')->nullable(); 
             $table->timestamps();

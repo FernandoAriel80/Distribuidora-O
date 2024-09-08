@@ -24,6 +24,5 @@ class Product extends Model
         'image_url',
         'category_id',
         'type_id',
-        'updated_at',
     ];
 }

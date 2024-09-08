@@ -4,6 +4,7 @@ import TextInput from '../../Components/TextInput.vue';
 import FormButton from '../../Components/FormButton.vue';
 import formSelect from '../../Components/formSelect.vue';
 import { defineProps } from 'vue';
+//import { preview } from 'vite';
 
 const form = useForm({
     catalog_id: null,
@@ -11,16 +12,16 @@ const form = useForm({
     description: null,
     bulk_unit_price: null,
     unit_price: null,
-    percent: null,
-    isOffer: null,
+    percent_off: null,
+    offer: false,
     price_offer: null,
-    stock: null,
+    stock: false,
     image_url: null,
     category_id: null,
     type_id: null,
-    type_name: null,
-    iskg: false,
-
+    //type_name: null,
+    //image: null,
+   // preview:null,
 });
 
 const props = defineProps({
@@ -28,17 +29,30 @@ const props = defineProps({
         type: Object,
         required: true
     },
-    types:{
+    types: {
         type: Object,
         required: true,
     },
+  /*   products: {
+        type: Object,
+        required: true,
+    }, */
 });
 
+const change = (e) => {
+    form.image_url = e.target.files[0];
+   // form.preview = URL.createObjectURL(e.target.files[0]);
+}
 const submit = () => {
-    /*  form.post("register", {
-         onError: () => form.reset("password", "password_confirmation"),
-     }); */
-     console.log(props);
+    form.post("create"); 
+   // console.log(form);
+   /* form.post("create")
+        .then(() => {
+            console.log('El registro se ha guardado exitosamente.');
+        })
+        .catch(error => {
+            console.log(error.response.data.errors + 'acaaaaaaaa errrrrorrrrr'); // Muestra los errores de validación
+        }); */
 };
 
 </script>
@@ -56,31 +70,30 @@ const submit = () => {
                         <label for="stock"> ¿Tiene stock?</label>
                         <input type="checkbox" id="stock" class="m-2" v-model="form.stock" />
                         <label for="offer"> ¿Esta en oferta?</label>
-                        <input type="checkbox" id="offer" class="m-2" v-model="form.isOffer" />
+                        <input type="checkbox" id="offer" class="m-2" v-model="form.offer" />
                     </div>
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                 <TextInput name="ID producto" v-model="form.catalog_id" :message="form.errors.catalog_id" />
                 <TextInput name="Nombre producto" v-model="form.name" :message="form.errors.name" />
-              
+
 
                 <formSelect name="Undiad de medida" v-model="form.type_id" :datas="props.types" />
                 <formSelect name="Seleccione Categoria" v-model="form.category_id" :datas="props.categories" />
 
-               <!--  <div v-if="form.type_id == '2'">
+                <!--  <div v-if="form.type_id == '2'">
                     <TextInput name="Precio por " v-model="form.unit_price" :message="form.errors.unit_price" />
                 </div> -->
-                <div v-if="!form.isOffer">
+                <div v-if="!form.offer">
                     <TextInput name="Precio por unidad" v-model="form.unit_price" :message="form.errors.unit_price" />
                     <TextInput name="Precio unico por bulto" v-model="form.bulk_unit_price"
                         :message="form.errors.bulk_unit_price" />
                 </div>
-                <div v-if="form.isOffer" :v-model="form.iskg = false">
-                    <TextInput name="Porcentaje de descuento (no obligatorio)" v-model="form.percent"
-                        :message="form.errors.percent" />
-                    <TextInput name="Precio oferta" v-model="form.price_offer"
-                        :message="form.errors.price_offer" />
+                <div v-if="form.offer">
+                    <TextInput name="Porcentaje de descuento (no obligatorio)" v-model="form.percent_off"
+                        :message="form.errors.percent_off" />
+                    <TextInput name="Precio oferta" v-model="form.price_offer" :message="form.errors.price_offer" />
 
                 </div>
             </div>
@@ -96,18 +109,54 @@ const submit = () => {
                 </div>
 
                 <div class="flex flex-col space-y-2 m-1">
-                    <label for="image" class="text-sm font-medium text-gray-700">Foto producto</label>
-                    <input type="file" id="image" @input="change"
+                    <label for="image_url" class="text-sm font-medium text-gray-700">Foto producto</label>
+                    <input type="file" id="image_url" @input="change"
                         class="text-sm p-2 border border-gray-300 rounded-md" />
+                        <p>{{ form.errors.image_url }}</p>
                 </div>
+
+               <!--  <div class=" grid place-items-center">
+                    <div class="relative w-28 h-28
+                     rounded-full overflow-hidden border border-slate-300">
+                        <label for="image" class="absolute inset-0 grid content-end 
+                        cursor-pointer">
+                            <span class="bg-while/70 pb-2 text-center">imagen</span>
+                        </label>
+                        <input type="file" @input="change" id="image" hidden>
+                        <img class="object-cover w-28 h-28" 
+                        :src="form.preview ?? 'storage/images/default.jpeg'"/>
+                    </div>
+                    <p class="error mt-2">{{ form.errors,image }}</p>
+                </div> -->
 
             </div>
 
             <div>
-                <FormButton :name="'Registrarse'" :progress="form.progress" class=" max-w-[200px] ml-auto" />
+                <!-- <FormButton :name="'Guardar'" :progress="form.progress" class=" max-w-[200px] ml-auto" />-->
+                 <FormButton :name="'Guardar'" class=" max-w-[200px] ml-auto" /> 
             </div>
         </form>
     </div>
+    <!-- //////////////////////////////////////////////////////////TABLA////////////////////////////////////////// -->
+   <!--  <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Lista de Productos</h1>
+
+        <ul class="list-disc list-inside">
+            <li v-for="product in products" :key="product.id" class="mb-2">
+                <div class="border p-4 rounded-lg shadow-md bg-white">
+                    <h2 class="text-xl font-semibold">{{ product.name }}</h2>
+                    <p><strong>Descripción:</strong> {{ product.description || 'No disponible' }}</p>
+                    <p><strong>Precio:</strong> ${{ product.unit_price }}</p>
+                    <p><strong>Stock:</strong> {{ product.stock ? 'Disponible' : 'Sin stock' }}</p>
+                    <p><strong>En Oferta:</strong> {{ product.offer ? 'Sí' : 'No' }}</p>
+                    <p v-if="product.offer"><strong>Precio de Oferta:</strong> ${{ product.price_offer }}</p>
+                    <p><strong>Tipo:</strong> {{ product.type_name }}</p>
+                    <img v-if="product.image_url" :src="product.image_url" alt="Imagen del producto"
+                        class="w-16 h-16 mt-2">
+                </div>
+            </li>
+        </ul>
+    </div> -->
 
 </template>
 

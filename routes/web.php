@@ -14,7 +14,10 @@ Route::middleware('auth')->group(function(){
 
    /*  Route::inertia('/create','Admin/Products/Create')->name('create'); */
   // Route::inertia('/create','Admin/Products/Create')->name('Create');
-   Route::get('/create',[ProductController::class,  'index'])->name('create');;
+   Route::get('/create',[ProductController::class,  'index'])->name('create');
+   Route::post('/create',[ProductController::class, 'store'])->name('create');
+  // Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+
    
 });
 
