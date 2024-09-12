@@ -40,18 +40,18 @@ class ProductController extends Controller
         //sleep(1);
         
          $fields = $request->validate([
-            'catalog_id' => ['required', 'integer'],
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'bulk_unit_price' => ['nullable', 'numeric', 'min:0'],
-            'unit_price' => ['nullable', 'numeric', 'min:0'],
-            'percent_off' => ['nullable', 'numeric', 'between:0,100'],
-            'offer' => ['nullable', 'boolean'], 
-            'price_offer' => ['nullable', 'numeric', 'min:0'],
-            'stock' => ['required', 'boolean'],
-            'image_url' =>  ['nullable', 'image', 'max:300'],
-            'category_id' => ['required', 'integer'],
-            'type_id' => ['required', 'integer'],
+            'catalog_id' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'bulk_unit_price' => 'nullable|numeric|min:0',
+            'unit_price' => 'nullable|numeric|min:0',
+            'percent_off' => 'nullable|numeric|between:0,100',
+            'offer' => 'nullable|boolean', 
+            'price_offer' => 'nullable|numeric|min:0',
+            'stock' => 'required|boolean',
+            'image_url' =>  'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'category_id' => 'required|integer',
+            'type_id' => 'required|integer',
        ]);    
        
        /* 'category_id' => ['required', 'integer', 'exists:categories,id'],
@@ -60,10 +60,30 @@ class ProductController extends Controller
        $fields['stock'] = $request->has('stock') ? $request->input('stock') : false; 
        
       
-       if($request->hasFile('image')){
+       /* if($request->hasFile('image')){
            $fields['image'] = Storage::disk('public')->put('images',$request->image);
-       }
- 
+       }*/
+        try {
+            if($request->hasFile('image_url')){
+                $filename = time() . '_' . $request->file('image_url')->getClientOriginalName();
+                $fields['image_url'] = Storage::disk('public')->putFileAs('image_url', $request->file('image_url'), $filename);
+                
+            }
+        } catch (\Exception $e) {
+            // Manejar error, loguear, o redirigir con un mensaje de error
+            return back()->withErrors('Error al subir la imagen.');
+        }
+       /*  try {
+            if($request->hasFile('image_url')){
+                $filename = time() . '_' . $request->file('image_url')->getClientOriginalName();
+
+                $path = $request->file('image_url')->storeAs('image_url', $filename, 'public');
+            }
+        } catch (\Exception $e) {
+            return back()->withErrors('Error al subir la imagen.');
+        }
+        $url = Storage::url($path);  
+        $fields['image_url'] = $url;  */
      
         Product::create($fields);
 

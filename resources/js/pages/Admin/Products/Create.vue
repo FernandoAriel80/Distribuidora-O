@@ -79,23 +79,24 @@ const submit = () => {
                 <TextInput name="Nombre producto" v-model="form.name" :message="form.errors.name" />
 
 
-                <formSelect name="Undiad de medida" v-model="form.type_id" :datas="props.types" />
-                <formSelect name="Seleccione Categoria" v-model="form.category_id" :datas="props.categories" />
+                <formSelect name="Undiad de medida" v-model="form.type_id" :datas="props.types" :message="form.errors.types" />
+                <formSelect name="Seleccione Categoria" v-model="form.category_id" :datas="props.categories" :message="form.errors.categories" />
 
-                <!--  <div v-if="form.type_id == '2'">
-                    <TextInput name="Precio por " v-model="form.unit_price" :message="form.errors.unit_price" />
-                </div> -->
-                <div v-if="!form.offer">
-                    <TextInput name="Precio por unidad" v-model="form.unit_price" :message="form.errors.unit_price" />
-                    <TextInput name="Precio unico por bulto" v-model="form.bulk_unit_price"
-                        :message="form.errors.bulk_unit_price" />
-                </div>
                 <div v-if="form.offer">
                     <TextInput name="Porcentaje de descuento (no obligatorio)" v-model="form.percent_off"
                         :message="form.errors.percent_off" />
                     <TextInput name="Precio oferta" v-model="form.price_offer" :message="form.errors.price_offer" />
-
                 </div>
+                <div v-else-if="!form.offer && form.type_id == 1">
+                    <TextInput name="Precio por unidad" v-model="form.unit_price" :message="form.errors.unit_price" />
+                    <TextInput name="Precio unico por bulto" v-model="form.bulk_unit_price"
+                        :message="form.errors.bulk_unit_price" />
+                </div>
+                 <div v-else-if="!form.offer">
+                    <TextInput name="Precio" v-model="form.unit_price" :message="form.errors.unit_price" />
+                </div>
+               
+                
             </div>
             <div class="">
 
@@ -112,7 +113,7 @@ const submit = () => {
                     <label for="image_url" class="text-sm font-medium text-gray-700">Foto producto</label>
                     <input type="file" id="image_url" @input="change"
                         class="text-sm p-2 border border-gray-300 rounded-md" />
-                        <p>{{ form.errors.image_url }}</p>
+                        <p class="text-red-500 text-sm">{{ form.errors.image_url }}</p>
                 </div>
 
                <!--  <div class=" grid place-items-center">
