@@ -9,18 +9,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
+
 class ProductController extends Controller
 {
     public function index()
     {
-        $categories = Category::all('id','name');
+       /*  $categories = Category::all('id','name');
         $types = Type::all('id','name');
         $products = Product::all();
         return Inertia::render('Admin/Products/Create',[
             'categories' => $categories,
             'types' => $types,
             'products' => $products,
-        ]);
+        ]); */
     }
 
     /**
@@ -37,7 +38,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
-        sleep(1);
+      /*   sleep(1);
          $fields = $request->validate([
             'catalog_id' => 'required|integer',
             'name' => 'required|string|max:255',
@@ -69,8 +70,8 @@ class ProductController extends Controller
       
         Product::create($fields);
 
-        return redirect()->route('home')->with('message', 'El registro se ha guardado exitosamente.');
-
+        return redirect()->route('home')->with('greet', 'El registro se ha guardado exitosamente.');
+ */
     }
 
     /**
@@ -78,11 +79,11 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+      /*   $product = Product::findOrFail($id);
 
         return Inertia::render('Products/Show', [
             'product' => $product,
-        ]);
+        ]); */
     }
 
 

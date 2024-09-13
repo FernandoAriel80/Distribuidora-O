@@ -6,7 +6,7 @@ defineOptions({ layout: Layout });
 
    <Head title="Inicio" />
    <div>
-      <!-- <p v-if="$page.props.auth.user" class="p-4 bg-green-200">{{ $page.props.flash.greet }}</p> -->
+    <!--   <p v-if="$page.props.auth.user" class="p-4 bg-green-200">{{ $page.props.flash.greet }}</p> -->
       <!-- <p class="line-through">$ 6376.09</p> -->
       <h1>Inicio</h1>
 

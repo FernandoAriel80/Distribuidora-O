@@ -3,7 +3,7 @@ import { useForm } from '@inertiajs/vue3';
 import TextInput from '../../Components/TextInput.vue';
 import FormButton from '../../Components/FormButton.vue';
 import formSelect from '../../Components/formSelect.vue';
-import ImagePreview from '../../Components/ImagePreview.vue';
+//import ImagePreview from '../../Components/ImagePreview.vue';
 import { defineProps } from 'vue';
 //import { preview } from 'vite';
 
@@ -16,7 +16,7 @@ const form = useForm({
     percent_off: null,
     offer: false,
     price_offer: null,
-    stock: false,
+    stock: true,
     image_url: null,
     category_id: null,
     type_id: null,
@@ -34,10 +34,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    products: {
+   /*  products: {
         type: Object,
         required: true,
-    },
+    }, */
 });
 const change = (e) => {
     form.image_url = e.target.files[0];
@@ -64,7 +64,7 @@ const submit = () => {
 
     <div class="w-full max-w-4xl mx-auto">
         <form @submit.prevent="submit" class="p-8 rounded-md ring-1 ring-slate-300">
-            <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Carga Producto</label>
+            <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Cargar Producto</label>
             <div>
                 <div class="p-3 bg-green-500">
                     <div>
@@ -90,7 +90,7 @@ const submit = () => {
                         :message="form.errors.percent_off" />
                     <TextInput name="Precio oferta" v-model="form.price_offer" :message="form.errors.price_offer" />
                 </div>
-                <div v-else-if="!form.offer && form.type_id == 1">
+                <div v-else-if="(!form.offer && form.type_id == 1) ">
                     <TextInput name="Precio por unidad" v-model="form.unit_price" :message="form.errors.unit_price" />
                     <TextInput name="Precio unico por bulto" v-model="form.bulk_unit_price"
                         :message="form.errors.bulk_unit_price" />
@@ -140,7 +140,7 @@ const submit = () => {
     </div>
     <!-- //////////////////////////////////////////////////////////TABLA////////////////////////////////////////// -->
 
-    <div class="container mx-auto p-4">
+    <!-- <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Lista de Productos</h1>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
@@ -201,7 +201,7 @@ const submit = () => {
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> -->
 
 </template>
 
