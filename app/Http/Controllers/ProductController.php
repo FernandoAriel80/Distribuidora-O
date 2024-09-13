@@ -37,8 +37,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
-        //sleep(1);
-        
+        sleep(1);
          $fields = $request->validate([
             'catalog_id' => 'required|integer',
             'name' => 'required|string|max:255',
@@ -54,43 +53,23 @@ class ProductController extends Controller
             'type_id' => 'required|integer',
        ]);    
        
-       /* 'category_id' => ['required', 'integer', 'exists:categories,id'],
-       'type_id' => ['required', 'integer', 'exists:types,id'], */
        $fields['offer'] = $request->has('offer') ? $request->input('offer') : false;
        $fields['stock'] = $request->has('stock') ? $request->input('stock') : false; 
        
-      
-       /* if($request->hasFile('image')){
-           $fields['image'] = Storage::disk('public')->put('images',$request->image);
-       }*/
         try {
             if($request->hasFile('image_url')){
                 $filename = time() . '_' . $request->file('image_url')->getClientOriginalName();
-                $fields['image_url'] = Storage::disk('public')->putFileAs('image_url', $request->file('image_url'), $filename);
-                
-            }
-        } catch (\Exception $e) {
-            // Manejar error, loguear, o redirigir con un mensaje de error
-            return back()->withErrors('Error al subir la imagen.');
-        }
-       /*  try {
-            if($request->hasFile('image_url')){
-                $filename = time() . '_' . $request->file('image_url')->getClientOriginalName();
-
-                $path = $request->file('image_url')->storeAs('image_url', $filename, 'public');
+                $fields['image_url'] = Storage::disk('public')->putFileAs('image_url', $request->file('image_url'), $filename);     
+            }else {
+                $fields['image_url'] = '/image_url/default.jpeg';
             }
         } catch (\Exception $e) {
             return back()->withErrors('Error al subir la imagen.');
         }
-        $url = Storage::url($path);  
-        $fields['image_url'] = $url;  */
-     
+      
         Product::create($fields);
 
-       // Retornar alguna respuesta, puede ser una redirección o mensaje
-    
-       /* return  redirect('home')->with('message', 'El registro se ha guardado exitosamente.');  */
-       return redirect()->route('home')->with('message', 'El registro se ha guardado exitosamente.');
+        return redirect()->route('home')->with('message', 'El registro se ha guardado exitosamente.');
 
     }
 
@@ -99,7 +78,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::findOrFail($id); // Busca el producto por su ID
+        $product = Product::findOrFail($id);
 
         return Inertia::render('Products/Show', [
             'product' => $product,
