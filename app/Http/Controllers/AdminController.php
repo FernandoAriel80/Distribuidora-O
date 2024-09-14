@@ -16,14 +16,14 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $categories = Category::all('id','name');
-        $types = Type::all('id','name');
-        $products = Product::all();
-        return Inertia::render('Admin/Products/Index', [
-            'categories' => $categories,
-            'types' => $types,
+        $products = Product::with(['type','category'])
+            ->orderBy('id','desc')
+            ->paginate(5);
+           // dd($products->toArray());
+          return Inertia::render('Admin/Products/Index', [
             'products' => $products,
-        ]);
+        ]); 
+
     }
 
     /**

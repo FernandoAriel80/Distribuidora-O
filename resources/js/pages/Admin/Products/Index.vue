@@ -1,25 +1,21 @@
 <script setup>
 import ImagePreview from '../../Components/ImagePreview.vue';
+import Pagination from '../../Components/Pagination.vue';
+import { defineProps } from 'vue';
+
 
 
 const props = defineProps({
-    categories: {
-        type: Object,
-        required: true
-    },
-    types: {
-        type: Object,
-        required: true,
-    },
     products: {
-        type: Object,
+        type: [Object, Array],
         required: true,
     },
 });
 </script>
 <template>
-<Head title="Admin" />
-<p v-if="$page.props.flash.greet" class="p-4 bg-green-200">{{ $page.props.flash.greet }}</p>
+
+    <Head title="Admin" />
+    <p v-if="$page.props.flash.greet" class="p-4 bg-green-200">{{ $page.props.flash.greet }}</p>
 
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Lista de Productos</h1>
@@ -56,20 +52,23 @@ const props = defineProps({
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    <tr v-for="product in props.products" :key="product.id">
+                    <tr v-for="product in products.data" :key="product.id">
                         <td class="px-4 py-3 text-sm text-gray-900">{{ product.catalog_id }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500">{{ product.name }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500">{{ product.description }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500">{{ product.bulk_unit_price }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500">{{ product.unit_price }}</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">{{ product.percent_off }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">
+                            {{ product.percent_off === null ? product.percent_off : '%' + product.percent_off }}
+                        </td>
                         <td class="px-4 py-3 text-sm text-gray-500">{{ product.price_offer }}</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">{{ product.stock }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">
+                            {{ product.stock === 1 ? 'SI' : 'NO' }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500">
                             <ImagePreview :src="`/storage/${product.image_url}`" alt="Imagen del producto" />
                         </td>
-                        <td class="px-4 py-3 text-sm text-gray-500">{{ product.category_id }}</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">{{ product.type_id }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">{{ product.category.name }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">{{ product.type.name }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500">
                             <button @click="editProduct(product)"
                                 class="bg-blue-500 text-white px-3 py-1 rounded text-xs">Editar</button>
@@ -81,7 +80,12 @@ const props = defineProps({
                     </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
 
+        </div>
+
+    </div>
+    <div>
+        <!--  <PaginationList :paginator="products" /> -->
+        <Pagination class="mt-4" :links="products.links" />
+    </div>
 </template>
