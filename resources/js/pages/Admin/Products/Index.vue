@@ -1,8 +1,11 @@
 <script setup>
 import ImagePreview from '../../Components/ImagePreview.vue';
 import Pagination from '../../Components/Pagination.vue';
+import ConfirmationModal from '../../Components/ConfirmationModal.vue';
+import routes from '../../../router';
 import { defineProps } from 'vue';
-
+import { Link } from '@inertiajs/vue3';
+import { Inertia } from '@inertiajs/inertia';
 
 
 const props = defineProps({
@@ -11,6 +14,18 @@ const props = defineProps({
         required: true,
     },
 });
+
+const deleteProduct = (e) => {
+    if (confirm('¿Estás seguro de que quieres eliminar este producto?'+ e)) {
+        Inertia.delete(routes.products.delete(e), {
+            onSuccess: () => {   
+            },
+            onError: (error) => {
+                console.error(error);
+            },
+        });
+    }
+};
 </script>
 <template>
 
@@ -23,7 +38,8 @@ const props = defineProps({
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            ID
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Nombre</th>
@@ -33,17 +49,20 @@ const props = defineProps({
                             Precio por Bulto</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Precio por Unidad</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">% Off
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            % Off
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Precio Oferta</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Stock
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Imagen</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Categoría</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Tipo
                         </th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Editar</th>
@@ -70,8 +89,9 @@ const props = defineProps({
                         <td class="px-4 py-3 text-sm text-gray-500">{{ product.category.name }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500">{{ product.type.name }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500">
-                            <button @click="editProduct(product)"
-                                class="bg-blue-500 text-white px-3 py-1 rounded text-xs">Editar</button>
+                            <button class="bg-blue-500 text-white px-3 py-1 rounded text-xs">
+                                <Link :href="routes.products.edit(product.id)">Editar</Link>
+                            </button>
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-500">
                             <button @click="deleteProduct(product.id)"
@@ -82,10 +102,10 @@ const props = defineProps({
             </table>
 
         </div>
+        <div>
+            <!--  <PaginationList :paginator="products" /> -->
+            <Pagination class="mt-4" :links="products.links" />
+        </div>
 
-    </div>
-    <div>
-        <!--  <PaginationList :paginator="products" /> -->
-        <Pagination class="mt-4" :links="products.links" />
     </div>
 </template>

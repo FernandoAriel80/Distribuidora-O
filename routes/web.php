@@ -34,9 +34,15 @@ Route::middleware('auth')->group(function () {
         Route::prefix('products')->group(function () {
             //Route::inertia('/create', 'Admin/Products/Create')->name('products.create'); 
             Route::get('/', [AdminController::class, 'index'])->name('products.index'); 
+            Route::delete('/{id}', [AdminController::class, 'destroy'])->name('products.destroy');
+
             Route::get('/create', [AdminController::class, 'create'])->name('products.create');
-            Route::post('/create', [AdminController::class, 'store'])->name('products.store'); 
-            // Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+            Route::post('/create', [AdminController::class, 'store'])->name('products.store');
+
+            Route::inertia('/edit', 'Admin/Products/Edit')->name('products.edit'); 
+            Route::get('/edit/{id}', [AdminController::class, 'edit'])->name('products.edit');
+            Route::put('/edit/{id}', [AdminController::class, 'update']);
+
         });
     });
 });

@@ -11,6 +11,8 @@ export default {
     products: {
         index: '/admin/products',
         create: '/admin/products/create',
-        show: (id) => `/admin/products/${id}`,
+        edit: (id) => `/admin/products/edit/${id}`,
+        update: (id) =>`/admin/products/edit/${id}`,
+        delete:(id) => `/admin/products/${id}`,
     },
 };

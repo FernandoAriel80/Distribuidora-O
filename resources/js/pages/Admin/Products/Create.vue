@@ -3,9 +3,7 @@ import { useForm } from '@inertiajs/vue3';
 import TextInput from '../../Components/TextInput.vue';
 import FormButton from '../../Components/FormButton.vue';
 import formSelect from '../../Components/formSelect.vue';
-//import ImagePreview from '../../Components/ImagePreview.vue';
 import { defineProps } from 'vue';
-//import { preview } from 'vite';
 
 const form = useForm({
     catalog_id: null,
@@ -20,9 +18,6 @@ const form = useForm({
     image_url: null,
     category_id: null,
     type_id: null,
-    //type_name: null,
-    //image: null,
-    // preview:null,
 });
 
 const props = defineProps({
@@ -34,15 +29,15 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-   /*  products: {
+    /*  products: {
         type: Object,
         required: true,
-    }, */
+        }, */
 });
 const change = (e) => {
     form.image_url = e.target.files[0];
     // form.preview = URL.createObjectURL(e.target.files[0]);
-}
+};
 const submit = () => {
     form.post("create");
     // console.log(form);
@@ -90,7 +85,7 @@ const submit = () => {
                         :message="form.errors.percent_off" />
                     <TextInput name="Precio oferta" v-model="form.price_offer" :message="form.errors.price_offer" />
                 </div>
-                <div v-else-if="(!form.offer && form.type_id == 1) ">
+                <div v-else-if="(!form.offer && form.type_id == 1)">
                     <TextInput name="Precio por unidad" v-model="form.unit_price" :message="form.errors.unit_price" />
                     <TextInput name="Precio unico por bulto" v-model="form.bulk_unit_price"
                         :message="form.errors.bulk_unit_price" />

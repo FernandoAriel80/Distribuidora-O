@@ -93,22 +93,76 @@ class AdminController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        try {
+            $product = Product::findOrFail($id);
+            $categories = Category::all('id','name');
+            $types = Type::all('id','name');
+            return Inertia::render('Admin/Products/Edit', [
+                'product' => $product,
+                'categories'=> $categories,
+                'types' => $types,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->route('products.index')->withErrors('Error: El producto no fue encontrado.');
+        }
     }
+    
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        dd($id,$request);
+        sleep(1);
+        $fields = $request->validate([
+            'catalog_id' => 'nullable|integer',
+            'name' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'bulk_unit_price' => 'nullable|numeric|min:0',
+            'unit_price' => 'nullable|numeric|min:0',
+            'percent_off' => 'nullable|numeric|between:0,100',
+            'offer' => 'nullable|boolean', 
+            'price_offer' => 'nullable|numeric|min:0',
+            'stock' => 'nullable|boolean',
+            'image_url' =>  'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'category_id' => 'nullable|integer',
+            'type_id' => 'nullable|integer',
+        ]);
+    
+       // dd($fields);
+        $fields['offer'] = $request->has('offer') ? $request->input('offer') : false;
+        $fields['stock'] = $request->has('stock') ? $request->input('stock') : false; 
+    
+        $product = Product::findOrFail($id);
+    
+        try {
+            if ($request->hasFile('image_url')) {
+                $filename = time() . '_' . $request->file('image_url')->getClientOriginalName();
+                $fields['image_url'] = Storage::disk('public')->putFileAs('image_url', $request->file('image_url'), $filename);
+            }
+        } catch (\Exception $e) {
+            return back()->withErrors('Error al subir la imagen.');
+        }
+    
+        $product->update($fields); 
+    
+        return redirect()->route('products.index')->with('greet', 'El registro se ha actualizado exitosamente.');
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        sleep(1);
+        $product = Product::findOrFail($id);
+        if ($product->image_url !== '/image_url/default.jpeg') {
+            Storage::disk('public')->delete($product->image_url);
+        }
+        $product->delete();
+        return redirect()->route('products.index')->with('greet', 'El producto ha sido eliminado exitosamente.');
     }
+
 }
