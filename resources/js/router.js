@@ -12,7 +12,7 @@ export default {
         index: '/admin/products',
         create: '/admin/products/create',
         edit: (id) => `/admin/products/edit/${id}`,
-        update: (id) =>`/admin/products/edit/${id}`,
+        //update: (id) =>`/admin/products/edit/${id}`,
         delete:(id) => `/admin/products/${id}`,
     },
 };

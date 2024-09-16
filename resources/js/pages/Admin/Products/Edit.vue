@@ -3,8 +3,9 @@ import { useForm } from '@inertiajs/vue3';
 import TextInput from '../../Components/TextInput.vue';
 import FormButton from '../../Components/FormButton.vue';
 import formSelect from '../../Components/formSelect.vue';
+import ImagePreview from '../../Components/ImagePreview.vue';
 import routes from '../../../router';
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 
 const props = defineProps({
     categories: {
@@ -15,47 +16,52 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    product: Object
+    products: {
+        type: Object,
+        required: true,
+    },
 });
+
+console.log(props);
 const form = useForm({
-    catalog_id: props.product.catalog_id,
-    name: props.product.name,
-    description: props.product.description,
-    bulk_unit_price: props.product.bulk_unit_price,
-    unit_price: props.product.unit_price,
-    percent_off: props.product.percent_off,
-    offer: props.product.offer === 1 ? true : false,
-    price_offer: props.product.price_offer,
-    stock: props.product.stock === 1 ? true : false,
+    catalog_id: props.products.catalog_id,
+    name: props.products.name,
+    description: props.products.description,
+    bulk_unit_price: props.products.bulk_unit_price,
+    unit_price: props.products.unit_price,
+    percent_off: props.products.percent_off,
+    offer: props.products.offer === 1 ? true : false,
+    price_offer: props.products.price_offer,
+    stock: props.products.stock === 1 ? true : false,
     image_url: null,
-    category_id: props.product.category_id,
-    type_id: props.product.type_id,
+    image_aux: props.products.image_url,
+    category_id: props.products.category_id,
+    type_id: props.products.type_id,
 });
+
+
+//const req = ref('requires');
+
+const srcImg = ref(props.products.image_url);
+//const msj = ref('');
+//const classMsj = ref('hidden');
+
+/* const change = (e) => {
+    form.image_url = e.target.files[0];
+    //console.log(form);
+}; */
 
 const change = (e) => {
     form.image_url = e.target.files[0];
+    srcImg.value = URL.createObjectURL(e.target.files[0]);
 };
-
 const submit = () => {
-    console.log(form);
-    form.put(routes.products.update(props.product.id));
-
-};
-/* const submit = () => {
-    const data = new FormData();
-    for (const [key, value] of Object.entries(form)) {
-        data.append(key, value);
-    }
-    data.append('image_url', form.image_url); // Agrega el archivo si existe
-    
-    form.put(routes.products.update(props.product.id), {
-        data,
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
+    console.log(props.products)
+    console.log(form)
+    form.post(routes.products.edit(props.products.id), {
+        onSuccess: () => { }
     });
-}; */
-
+};
 
 </script>
 
@@ -78,9 +84,7 @@ const submit = () => {
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                 <TextInput name="ID producto" v-model="form.catalog_id" :message="form.errors.catalog_id" />
-
                 <TextInput name="Nombre producto" v-model="form.name" :message="form.errors.name" />
-
 
                 <formSelect name="Undiad de medida" v-model="form.type_id" :datas="props.types"
                     :message="form.errors.types" />
@@ -100,11 +104,8 @@ const submit = () => {
                 <div v-else-if="!form.offer">
                     <TextInput name="Precio" v-model="form.unit_price" :message="form.errors.unit_price" />
                 </div>
-
-
             </div>
             <div class="">
-
                 <div class="m-1">
                     <label class="block text-sm font-medium leading-6 text-slate-900">Descripcion</label>
                     <textarea id="largeText" v-model="form.description" rows="6" class="mt-1 block w-full p-2 
@@ -113,20 +114,19 @@ const submit = () => {
                         placeholder="Escribe aquí una descripción detallada..."></textarea>
                     <small class="error" v-if="form.errors.price_offer">{{ form.errors.description }}</small>
                 </div>
-
                 <div class="flex flex-col space-y-2 m-1">
-                    <div>
-                        <img :src="`/storage/${props.product.image_url}`" alt="Imagen actual"
-                            class="mb-2 w-32 h-32 object-cover" />
+                    <div v-if="props.products.image_url == srcImg">
+                        <ImagePreview class="mb-2 w-32 h-32" :src="`/storage/${srcImg}`" alt="Imagen del producto" />
+                    </div>
+                    <div v-else>
+                        <ImagePreview class="mb-2 w-32 h-32" :src="srcImg" alt="Imagen del producto" />
                     </div>
                     <div class="flex flex-col space-y-2 m-1">
                         <label for="image_url" class="text-sm font-medium text-gray-700">Foto producto</label>
                         <input type="file" id="image_url" @change="change"
                             class="text-sm p-2 border border-gray-300 rounded-md" />
-
                         <p class="text-red-500 text-sm">{{ form.errors.image_url }}</p>
                     </div>
-
                 </div>
             </div>
             <div>

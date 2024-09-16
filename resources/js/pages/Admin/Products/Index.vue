@@ -2,8 +2,9 @@
 import ImagePreview from '../../Components/ImagePreview.vue';
 import Pagination from '../../Components/Pagination.vue';
 import ConfirmationModal from '../../Components/ConfirmationModal.vue';
+import Modal from '../../Components/Modal.vue';
 import routes from '../../../router';
-import { defineProps } from 'vue';
+import { ref,defineProps } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { Inertia } from '@inertiajs/inertia';
 
@@ -16,9 +17,9 @@ const props = defineProps({
 });
 
 const deleteProduct = (e) => {
-    if (confirm('¿Estás seguro de que quieres eliminar este producto?'+ e)) {
+    if (confirm('¿Estás seguro de que quieres eliminar este producto?' + e)) {
         Inertia.delete(routes.products.delete(e), {
-            onSuccess: () => {   
+            onSuccess: () => {
             },
             onError: (error) => {
                 console.error(error);
@@ -26,12 +27,27 @@ const deleteProduct = (e) => {
         });
     }
 };
+
+const isModalVisible = ref(false);
+
+const openModal = () => {
+  isModalVisible.value = true;
+};
 </script>
 <template>
 
     <Head title="Admin" />
     <p v-if="$page.props.flash.greet" class="p-4 bg-green-200">{{ $page.props.flash.greet }}</p>
+    <!-- Modal -->
+    <div>
+        <button @click="openModal" class="px-4 py-2 bg-blue-500 text-white rounded">Abrir Modal</button>
 
+        <!-- Modal -->
+        <Modal :isVisible="isModalVisible" title="Mi Modal" @close="isModalVisible = false">
+            <p>Este es el contenido dentro del modal.</p>
+        </Modal>
+    </div>
+    <!-- Modal -->
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Lista de Productos</h1>
         <div class="overflow-x-auto">
@@ -84,7 +100,7 @@ const deleteProduct = (e) => {
                         <td class="px-4 py-3 text-sm text-gray-500">
                             {{ product.stock === 1 ? 'SI' : 'NO' }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500">
-                            <ImagePreview :src="`/storage/${product.image_url}`" alt="Imagen del producto" />
+                            <ImagePreview class="w-16 h-16" :src="`/storage/${product.image_url}`" alt="Imagen del producto" />
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-500">{{ product.category.name }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500">{{ product.type.name }}</td>

@@ -30,7 +30,7 @@ img:hover {
 
 <template>
   <div>
-    <img :src="src" @click="openModal" class="w-16 h-16 object-cover cursor-pointer" :alt="alt" />
+    <img :src="src" @click="openModal" class="object-cover cursor-pointer" :alt="alt" />
     <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75"
       @click="closeModal">
       <img :src="src" class="max-w-full max-h-full" />
