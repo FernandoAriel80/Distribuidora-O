@@ -14,16 +14,27 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['type','category'])
-            ->orderBy('id','desc')
-            ->paginate(5);
-           // dd($products->toArray());
-          return Inertia::render('Admin/Products/Index', [
-            'products' => $products,
-        ]); 
+  /*       $search = $request->input('search');
+    $products = Product::when($search, function ($query, $search) {
+        return $query->where('name', 'like', "%{$search}%");
+    })->get();
 
+    return Inertia::render('Index', [
+        'products' => $products,
+    ]); */
+    $search = $request->input('search');
+    $products = Product::with(['type', 'category'])
+        ->when($search, function($query, $search) {
+            return $query->where('name', 'like', "%{$search}%");
+        })
+        ->orderBy('id', 'desc')
+        ->paginate(5);
+    
+    return Inertia::render('Admin/Products/Index', [
+        'products' => $products,
+    ]);
     }
 
     /**

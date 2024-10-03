@@ -2,9 +2,10 @@
 import ImagePreview from '../../Components/ImagePreview.vue';
 import Pagination from '../../Components/Pagination.vue';
 import ConfirmationModal from '../../Components/ConfirmationModal.vue';
+import SearchInput from '../../Components/SearchInput.vue';
 import Modal from '../../Components/Modal.vue';
 import routes from '../../../router';
-import { ref,defineProps } from 'vue';
+import { ref, defineProps, watch } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { Inertia } from '@inertiajs/inertia';
 
@@ -31,8 +32,25 @@ const deleteProduct = (e) => {
 const isModalVisible = ref(false);
 
 const openModal = () => {
-  isModalVisible.value = true;
+    isModalVisible.value = true;
 };
+
+/* search */
+
+const products = ref(props.products);
+const search = ref('');
+
+const searchProducts = (searchTerm) => {
+    Inertia.get(routes.products.index, { search: searchTerm }, { preserveState: true });
+};
+
+watch(search, (newSearch) => {
+    if (newSearch) {
+        searchProducts(newSearch);
+    } else {
+        products.value = props.products; 
+    }
+});
 </script>
 <template>
 
@@ -50,6 +68,10 @@ const openModal = () => {
     <!-- Modal -->
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Lista de Productos</h1>
+
+        <!-- busqueda-->
+        <SearchInput :search-value="search" @update:searchValue="searchProducts" />
+        <!-- busqueda-->
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -100,7 +122,8 @@ const openModal = () => {
                         <td class="px-4 py-3 text-sm text-gray-500">
                             {{ product.stock === 1 ? 'SI' : 'NO' }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500">
-                            <ImagePreview class="w-16 h-16" :src="`/storage/${product.image_url}`" alt="Imagen del producto" />
+                            <ImagePreview class="w-16 h-16" :src="`/storage/${product.image_url}`"
+                                alt="Imagen del producto" />
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-500">{{ product.category.name }}</td>
                         <td class="px-4 py-3 text-sm text-gray-500">{{ product.type.name }}</td>
