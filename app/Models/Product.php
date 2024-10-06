@@ -9,6 +9,12 @@ class Product extends Model
 {
     use HasFactory;
 
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            return $query->where('name', 'like', "{$search}%");
+        }
+    }
     public function type(){
         return $this->belongsTo(Type::class);
     }

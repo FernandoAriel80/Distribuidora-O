@@ -14,29 +14,42 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+  /*   public function index(Request $request)
     {
-  /*       $search = $request->input('search');
-    $products = Product::when($search, function ($query, $search) {
-        return $query->where('name', 'like', "%{$search}%");
-    })->get();
-
-    return Inertia::render('Index', [
-        'products' => $products,
-    ]); */
-    $search = $request->input('search');
-    $products = Product::with(['type', 'category'])
-        ->when($search, function($query, $search) {
-            return $query->where('name', 'like', "%{$search}%");
-        })
+ 
+        $request->validate([
+            'search' => 'nullable|string|max:255',
+        ]);
+    
+        $search = (string) $request->input('search', '');
+        
+        $products = Product::with(['type', 'category'])
+        ->search($search)
         ->orderBy('id', 'desc')
         ->paginate(5);
+        
+      if($search){
+        //dd($products);
+      }
+        return Inertia::render('Admin/Products/Index', [
+            'products' => $products,
+        ]);
+    } */
     
-    return Inertia::render('Admin/Products/Index', [
-        'products' => $products,
-    ]);
-    }
+    public function index(Request $request)
+    {
+        $products = Product::query()
+        ->when($request->input('search'),function($query, $search){
+            $query->where('name','like',"%{$search}%");
+        })
+        ->paginate(5)
+        ->withQueryString();
+    
+        return Inertia::render('Admin/Products/Index',[
+            'products' => $products,
+        ]);
 
+    }
     /**
      * Show the form for creating a new resource.
      */

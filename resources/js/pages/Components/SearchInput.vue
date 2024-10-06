@@ -1,14 +1,14 @@
 <script setup>
 import { ref } from 'vue';
 
-const props = defineProps(['searchValue']);
+const props = defineProps({searchValue: String});
 const emit = defineEmits(['update:searchValue']);
 
 const search = ref(props.searchValue);
-
+/* anda */
 const updateSearch = () => {
     emit('update:searchValue', search.value);
-};
+}; 
 </script>
 <template>
     <div class="flex justify-end mb-4">
@@ -23,4 +23,3 @@ const updateSearch = () => {
         </div>
     </div>
 </template>
-
