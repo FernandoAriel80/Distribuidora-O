@@ -1,67 +1,7 @@
-<!-- <script setup>
-import ImagePreview from '../../Components/ImagePreview.vue';
-import Pagination from '../../Components/Pagination.vue';
-//import ConfirmationModal from '../../Components/ConfirmationModal.vue';
-import SearchInput from '../../Components/SearchInput.vue';
-import Modal from '../../Components/Modal.vue';
-import routes from '../../../router';
-import { ref, defineProps, watch } from 'vue';
-import { Link } from '@inertiajs/vue3';
-import { Inertia } from '@inertiajs/inertia';
 
-
-const props = defineProps({
-    products: {
-        type: [Object, Array],
-        required: true,
-    },
-    productsSearch: {
-        type: [Object, Array],
-        required: true,
-    },
-});
-
-//const productsSearch = ref(props.products); 
-const search = ref('');
-console.log(props.products);
-
-const searchProducts = (searchTerm) => {
-    Inertia.get(routes.products.index, { search: searchTerm }, { preserveState: true });
-    console.log(props.productsSearch);
-};
-watch(search, (newSearch) => {
-    if (newSearch) {
-        searchProducts(newSearch);      
-    } else {
-       productsSearch.value =  props.products;
-    }
-}); 
-const deleteProduct = (e) => {
-    if (confirm('¿Estás seguro de que quieres eliminar este producto?' + e)) {
-        Inertia.delete(routes.products.delete(e), {
-            onSuccess: () => {
-            },
-            onError: (error) => {
-                console.error(error);
-            },
-        });
-    }
-};
-
-
-const isModalVisible = ref(false);
-
-const openModal = () => {
-    isModalVisible.value = true;
-};
-
-/* search */
-
-</script> -->
 <script setup>
 import ImagePreview from '../../Components/ImagePreview.vue';
 import Pagination from '../../Components/Pagination.vue';
-//import ConfirmationModal from '../../Components/ConfirmationModal.vue';
 import SearchInput from '../../Components/SearchInput.vue';
 import Modal from '../../Components/Modal.vue';
 import routes from '../../../router';
@@ -75,42 +15,22 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-
+    searchTerm:String
 });
 
-const search = ref("");
+const search = ref(props.searchTerm);
 const searchDebounced = debounce(()=>{ 
-    router.reload({only:['products'], data:{search:search.value} })
+    if (search == props.searchTerm) {
+        router.reload({only:['products'], data:{search:search.value},preserveState:true,preserveScroll:true,})
+    } else {
+        router.reload({only:['products'], data:{page:1, search:search.value},preserveState:true,preserveScroll:true,})
+    }
 },300) 
-
-const boton1 = () =>{
-}
-//console.log(props.products);
 
 watch(search, ()=>{
     searchDebounced();
 }); 
 
-/* function getProducts(dato){
-    console.log(dato);
-    Inertia.get(routes.products.index)   
-} */
-/* const products = ref(props.products); 
-const search = ref('');
-console.log(props.products);
-
-const searchProducts = (searchTerm) => {
-    Inertia.get(routes.products.index, { search: searchTerm }, { preserveState: true });
-    console.log(searchTerm);
-};
-watch(search, (newSearch) => {
-    if (newSearch) {
-        searchProducts(newSearch);      
-    } else {
-        products.value =  props.products;
-    }
-}); 
-  */
 const deleteProduct = (id) => {
     if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
         Inertia.delete(routes.products.delete(id), {
@@ -144,20 +64,8 @@ const openModal = () => {
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Lista de Productos</h1>
         <!-- busqueda-->
-         <button @click="boton1"> boton1 </button>
-        <!-- <SearchInput :search-value="search" @update:searchValue="searchProducts" /> -->
+        <SearchInput v-model:searchValue="search" />
 
-        <div class="flex justify-end mb-4">
-        <div class="w-1/4">
-            <input
-                type="search"
-                placeholder="Busqueda"
-                v-model="search"
-                class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-        </div>
-    </div>
-        <!-- busqueda-->
         <div v-if="props.products.data.length">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -212,8 +120,8 @@ const openModal = () => {
                                 <ImagePreview class="w-16 h-16" :src="`/storage/${product.image_url}`"
                                     alt="Imagen del producto" />
                             </td>
-                         <!--    <td class="px-4 py-3 text-sm text-gray-500">{{ product.category.name }}</td>
-                            <td class="px-4 py-3 text-sm text-gray-500">{{ product.type.name }}</td> -->
+                            <td class="px-4 py-3 text-sm text-gray-500">{{ product.category.name }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">{{ product.type.name }}</td>
                             <td class="px-4 py-3 text-sm text-gray-500">
                                 <button class="bg-blue-500 text-white px-3 py-1 rounded text-xs">
                                     <Link :href="routes.products.edit(product.id)">Editar</Link>
@@ -233,8 +141,7 @@ const openModal = () => {
             <p> no encontrado</p>
         </div>
         <div>
-            <!--  <PaginationList :paginator="products" /> -->
-            <Pagination class="mt-4" :links="products.links" />
+            <Pagination class="mt-4" :links="products.links"/>
         </div>
 
     </div>

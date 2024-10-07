@@ -14,7 +14,7 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-  /*   public function index(Request $request)
+    public function index(Request $request)
     {
  
         $request->validate([
@@ -22,34 +22,19 @@ class ProductController extends Controller
         ]);
     
         $search = (string) $request->input('search', '');
-        
+
         $products = Product::with(['type', 'category'])
         ->search($search)
         ->orderBy('id', 'desc')
-        ->paginate(5);
-        
-      if($search){
-        //dd($products);
-      }
-        return Inertia::render('Admin/Products/Index', [
-            'products' => $products,
-        ]);
-    } */
-    
-    public function index(Request $request)
-    {
-        $products = Product::query()
-        ->when($request->input('search'),function($query, $search){
-            $query->where('name','like',"%{$search}%");
-        })
         ->paginate(5)
         ->withQueryString();
-    
-        return Inertia::render('Admin/Products/Index',[
+        
+        return Inertia::render('Admin/Products/Index', [
             'products' => $products,
+            'searchTerm' => $search,
         ]);
-
     }
+    
     /**
      * Show the form for creating a new resource.
      */

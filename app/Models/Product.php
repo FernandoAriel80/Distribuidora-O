@@ -12,7 +12,7 @@ class Product extends Model
     public function scopeSearch($query, $search)
     {
         if ($search) {
-            return $query->where('name', 'like', "{$search}%");
+            return $query->where('name', 'like', "%{$search}%")->orWhere('catalog_id','like',"%{$search}%");
         }
     }
     public function type(){
