@@ -15,12 +15,12 @@ import routes from '../../router';
         Ver Productos
         </Link>
       </li>
-      <li>
+     <!--  <li>
         <Link :href="routes.products.create"
           class="block px-4 py-2 rounded-md bg-green-500 hover:bg-green-400 transition duration-200">
         Cargar Producto
         </Link>
-      </li>
+      </li> -->
       
     </ul>
   </div>

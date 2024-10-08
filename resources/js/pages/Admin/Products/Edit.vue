@@ -22,7 +22,6 @@ const props = defineProps({
     },
 });
 
-console.log(props);
 const form = useForm({
     catalog_id: props.products.catalog_id,
     name: props.products.name,
@@ -39,9 +38,7 @@ const form = useForm({
     type_id: props.products.type_id,
 });
 
-
-//const req = ref('requires');
-
+const emit = defineEmits(['actionExecuted']);
 const srcImg = ref(props.products.image_url);
 //const msj = ref('');
 //const classMsj = ref('hidden');
@@ -56,10 +53,13 @@ const change = (e) => {
     srcImg.value = URL.createObjectURL(e.target.files[0]);
 };
 const submit = () => {
-    console.log(props.products)
-    console.log(form)
     form.post(routes.products.edit(props.products.id), {
-        onSuccess: () => { }
+        onSuccess: () => {
+            emit('actionExecuted');
+        },
+        onError: (errors) => {
+            console.log('Se encontraron errores:', errors);
+        },
     });
 };
 

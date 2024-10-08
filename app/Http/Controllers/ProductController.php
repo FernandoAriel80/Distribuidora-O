@@ -28,10 +28,15 @@ class ProductController extends Controller
         ->orderBy('id', 'desc')
         ->paginate(5)
         ->withQueryString();
+        $categories = Category::all('id','name');
+        $types = Type::all('id','name');
         
         return Inertia::render('Admin/Products/Index', [
             'products' => $products,
+            'categories' => $categories,
+            'types' => $types,
             'searchTerm' => $search,
+            
         ]);
     }
     

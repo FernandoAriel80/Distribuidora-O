@@ -1,33 +1,21 @@
-    <script setup>
-    import { defineProps, defineEmits } from 'vue';
+<script setup>
 
-    const props = defineProps({
-        title: {
-            type: String,
-            required: true
-        },
-        isVisible: {
-            type: Boolean,
-            required: true
-        }
-    });
-
-    const emit = defineEmits(['close']);
-
-    const closeModal = () => {
-        emit('close');
-    };
+const props = defineProps({
+    isOpen: {
+        type: Boolean,
+        required: true,
+    },
+    closeModal: {
+        type: Function,
+        required: true,
+    },
+});
 </script>
-    
 <template>
-    <div v-if="isVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white rounded-lg p-6 max-w-lg w-full">
-            <h2 class="text-xl font-bold mb-4">{{ title }}</h2>
-            <slot></slot> <!-- Para contenido dinámico -->
-            <div class="mt-4 flex justify-end">
-                <button @click="closeModal" class="px-4 py-2 bg-red-500 text-white rounded">Cerrar</button>
-            </div>
-        </div>
+    <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white p-2 rounded-lg shadow-lg w-full max-w-4xl max-h-full overflow-y-auto">
+            <button @click="closeModal" class="px-4 py-2 bg-red-500 text-white rounded">Cerrar</button>            
+            <slot></slot>
+        </div>        
     </div>
 </template>
-
