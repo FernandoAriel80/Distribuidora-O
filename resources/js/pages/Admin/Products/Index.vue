@@ -1,3 +1,4 @@
+
 <script setup>
 import ImagePreview from '../../Components/ImagePreview.vue';
 import Pagination from '../../Components/Pagination.vue';
@@ -7,7 +8,7 @@ import CreateProduct from '../Products/Create.vue'
 import EditProduct from '../Products/Edit.vue'
 import routes from '../../../router';
 import { ref, defineProps, watch } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import {router } from '@inertiajs/vue3'; 
 import { Inertia } from '@inertiajs/inertia';
 import { debounce } from 'lodash';
 
@@ -53,56 +54,59 @@ const deleteProduct = (id) => {
     }
 };
 
-/* const isModalVisible = ref(false);
-
-const openModal = () => {
-    isModalVisible.value = true;
-}; */
-
 //showModal
-const showModal = ref(false);
+const showModalCreate = ref(false);
 const showModalEdit = ref(false);
+const showFlash = ref(true);
+const idEdit = ref();
 
-const openModal = () => {
-    showModal.value = true;
+const openModalCreate = () => {
+    showModalCreate.value = true;
+    showFlash.value = true;
 };
 
-const closeModal = () => {
-    showModal.value = false;
+const closeModalCreate = () => {
+    showModalCreate.value = false;
+    showFlash.value = false;
 };
 
-const openModalEdit = () => {
+const openModalEdit = (id) => { 
+    idEdit.value = id;
     showModalEdit.value = true;
+    showFlash.value = true;
 };
 const closeModalEdit = () => {
-    showModal.value = false;
+    showModalEdit.value = false;
+    showFlash.value = false;
 };
+const closeFlashAndModal = ()=>{
+    showModalCreate.value = false;
+    showModalEdit.value = false;
+    showFlash.value = true;
+}
+
+// Ocultar el mensaje después de unos segundos
+
 </script>
 <template>
 
     <Head title="Admin" />
-    <p v-if="$page.props.flash.greet" class="p-4 bg-green-200">{{ $page.props.flash.greet }}</p>
+    <!-- <p v-if="$page.props.flash.greet" class="p-4 bg-green-200">{{ $page.props.flash.greet }}</p> -->
+    <p v-if="showFlash == false && $page.props.flash.greet" class="p-4 bg-green-200">{{ $page.props.flash.greet }}</p>
+    
     <!-- Modal -->
     <div>
-        <button @click="openModal" class="px-4 py-2 bg-blue-500 text-white rounded">Abrir Modal</button>
-       <!--  <div v-if="showModalEdit">
-      
-            <Modal :isOpen="showModalEdit" :closeModal="closeModalEdit">
-       
-               <EditProduct :categories="props.categories" :types="props.types" :products="props.products" @actionExecuted="closeModalEdit"/>
+        <button @click="openModalCreate" class="px-4 py-2 bg-blue-500 text-white rounded">Cargar Producto</button>      
+        <Modal :isOpen="showModalCreate" :closeModal="closeFlashAndModal">
+            <CreateProduct :categories="props.categories" :types="props.types" @actionExecuted="closeModalCreate" />
+        </Modal>
+    </div>
+    <div v-for="product in products.data" :key="product.id">
+        <div v-if="product.id == idEdit">           
+            <Modal :isOpen="showModalEdit" :closeModal="closeFlashAndModal">
+                <EditProduct :products="product" :categories="props.categories" :types="props.types" @actionExecuted="closeModalEdit" />
             </Modal>
         </div>
-        <div v-else>
-
-            <Modal :isOpen="showModal" :closeModal="closeModal">
-       
-                <CreateProduct :categories="props.categories" :types="props.types" @actionExecuted="closeModal" />
-            </Modal>
-        </div> -->
-        <Modal :isOpen="showModal" :closeModal="closeModal">
-                <!-- class="w-full max-w-md p-1 bg-white rounded-lg shadow-lg" -->
-                <CreateProduct :categories="props.categories" :types="props.types" @actionExecuted="closeModal" />
-            </Modal>
     </div>
     <!-- Modal -->
     <div class="container mx-auto p-4">
@@ -167,8 +171,10 @@ const closeModalEdit = () => {
                             <td class="px-4 py-3 text-sm text-gray-500">{{ product.category.name }}</td>
                             <td class="px-4 py-3 text-sm text-gray-500">{{ product.type.name }}</td>
                             <td class="px-4 py-3 text-sm text-gray-500">
-                                <button class="bg-blue-500 text-white px-3 py-1 rounded text-xs">
-                                    <Link :href="routes.products.edit(product.id)">Editar</Link>
+                                <button @click="openModalEdit(product.id)"
+                                    class="bg-blue-500 text-white px-3 py-1 rounded text-xs">
+                                    <!-- <Link :href="routes.products.edit(product.id)">Editar</Link> -->
+                                    Editar
                                 </button>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-500">

@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/create', [ProductController::class, 'store'])->name('products.store');
 
             Route::inertia('/edit', 'Admin/Products/Edit')->name('products.edit'); 
-            Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
+            Route::get('/edit', [ProductController::class, 'edit'])->name('products.edit');
             Route::post('/edit/{id}', [ProductController::class, 'update']);
 
         });

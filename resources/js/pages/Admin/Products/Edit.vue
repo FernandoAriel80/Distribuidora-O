@@ -5,18 +5,19 @@ import FormButton from '../../Components/FormButton.vue';
 import formSelect from '../../Components/formSelect.vue';
 import ImagePreview from '../../Components/ImagePreview.vue';
 import routes from '../../../router';
+//import {router } from '@inertiajs/vue3';
 import { defineProps, ref } from 'vue';
 
 const props = defineProps({
+    products: {
+        type: Object,
+        required: true,
+    },
     categories: {
         type: Object,
         required: true
     },
     types: {
-        type: Object,
-        required: true,
-    },
-    products: {
         type: Object,
         required: true,
     },
@@ -40,13 +41,6 @@ const form = useForm({
 
 const emit = defineEmits(['actionExecuted']);
 const srcImg = ref(props.products.image_url);
-//const msj = ref('');
-//const classMsj = ref('hidden');
-
-/* const change = (e) => {
-    form.image_url = e.target.files[0];
-    //console.log(form);
-}; */
 
 const change = (e) => {
     form.image_url = e.target.files[0];
