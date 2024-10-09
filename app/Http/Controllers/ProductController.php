@@ -177,7 +177,7 @@ class ProductController extends Controller
     {
         sleep(1);
         $product = Product::findOrFail($id);
-        if ($product->image_url !== '/image_url/default.jpeg') {
+        if ($product->image_url !== '/image_url/default.jpeg' && $product->image_url !== 'image_url/default.jpeg' ) {
             Storage::disk('public')->delete($product->image_url);
         }
         $product->delete();

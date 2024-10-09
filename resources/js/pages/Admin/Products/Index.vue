@@ -4,6 +4,7 @@ import ImagePreview from '../../Components/ImagePreview.vue';
 import Pagination from '../../Components/Pagination.vue';
 import SearchInput from '../../Components/SearchInput.vue';
 import Modal from '../../Components/Modal.vue';
+import ModalAsk from '../../Components/ModalAsk.vue';
 import CreateProduct from '../Products/Create.vue'
 import EditProduct from '../Products/Edit.vue'
 import routes from '../../../router';
@@ -43,22 +44,46 @@ watch(search, () => {
 });
 
 //delete
-const deleteProduct = (id) => {
-    if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+
+//showModal
+const showModalCreate = ref(false);
+const showModalEdit = ref(false);
+const showFlash = ref(true);
+const showAlert = ref(false);
+const modalAsk = ref(false);
+const curren_id = ref();
+
+const openModalAlert = (id) =>{
+    showAlert.value = true;
+    curren_id.value = id;
+}
+const closeModalAlert = () =>{
+    showAlert.value = false;
+}
+const closeModalAlertYes = () =>{
+    modalAsk.value = true;
+    showFlash.value = true;
+    deleteProduct(curren_id.value, modalAsk.value );
+    closeModalAlert();
+}
+const closeModalAlertNo = () =>{
+    modalAsk.value = false;
+    showFlash.value = false;
+    closeModalAlert();
+}
+
+const deleteProduct = (id, ask) => {
+    if (ask == true) {
         Inertia.delete(routes.products.delete(id), {
-            onSuccess: () => { },
+            onSuccess: () => {
+                products.value = products.value.filter(product => product.id !== id);
+            },
             onError: (error) => {
                 console.error(error);
             },
         });
     }
 };
-
-//showModal
-const showModalCreate = ref(false);
-const showModalEdit = ref(false);
-const showFlash = ref(true);
-const idEdit = ref();
 
 const openModalCreate = () => {
     showModalCreate.value = true;
@@ -71,7 +96,7 @@ const closeModalCreate = () => {
 };
 
 const openModalEdit = (id) => { 
-    idEdit.value = id;
+    curren_id.value = id;
     showModalEdit.value = true;
     showFlash.value = true;
 };
@@ -102,11 +127,14 @@ const closeFlashAndModal = ()=>{
         </Modal>
     </div>
     <div v-for="product in products.data" :key="product.id">
-        <div v-if="product.id == idEdit">           
+        <div v-if="product.id == curren_id">           
             <Modal :isOpen="showModalEdit" :closeModal="closeFlashAndModal">
                 <EditProduct :products="product" :categories="props.categories" :types="props.types" @actionExecuted="closeModalEdit" />
             </Modal>
         </div>
+    </div>
+    <div>
+        <ModalAsk :isOpen="showAlert" :closeNo="closeModalAlertNo" :closeYes="closeModalAlertYes" message="Esta seguro de eliminar este producto?"/>
     </div>
     <!-- Modal -->
     <div class="container mx-auto p-4">
@@ -178,7 +206,7 @@ const closeFlashAndModal = ()=>{
                                 </button>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-500">
-                                <button @click="deleteProduct(product.id)"
+                                <button @click="openModalAlert(product.id)"
                                     class="bg-red-500 text-white px-3 py-1 rounded text-xs">Eliminar</button>
                             </td>
                         </tr>
