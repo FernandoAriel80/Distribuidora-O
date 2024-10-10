@@ -181,7 +181,7 @@ class ProductController extends Controller
             Storage::disk('public')->delete($product->image_url);
         }
         $product->delete();
-        return redirect()->route('products.index')->with('greet', 'El producto ha sido eliminado exitosamente.');
+        return redirect()->route('products.index')->with('greet', 'El producto '.$product->catalog_id.' ha sido eliminado exitosamente.');
     }
 
 }

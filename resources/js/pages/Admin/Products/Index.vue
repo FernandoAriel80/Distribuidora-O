@@ -55,6 +55,7 @@ const curren_id = ref();
 
 const openModalAlert = (id) =>{
     showAlert.value = true;
+    showFlash.value = true;
     curren_id.value = id;
 }
 const closeModalAlert = () =>{
@@ -62,21 +63,23 @@ const closeModalAlert = () =>{
 }
 const closeModalAlertYes = () =>{
     modalAsk.value = true;
-    showFlash.value = true;
+    showFlash.value = false;
     deleteProduct(curren_id.value, modalAsk.value );
     closeModalAlert();
 }
 const closeModalAlertNo = () =>{
     modalAsk.value = false;
-    showFlash.value = false;
+    showFlash.value = true;
     closeModalAlert();
 }
 
 const deleteProduct = (id, ask) => {
     if (ask == true) {
-        Inertia.delete(routes.products.delete(id), {
+        router.delete(routes.products.delete(id), {
             onSuccess: () => {
-                products.value = products.value.filter(product => product.id !== id);
+                /* Inertia.reload({ 
+                only: ['products'], 
+            }); */
             },
             onError: (error) => {
                 console.error(error);
