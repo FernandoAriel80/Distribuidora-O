@@ -16,28 +16,31 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
- 
         $request->validate([
             'search' => 'nullable|string|max:255',
         ]);
     
         $search = (string) $request->input('search', '');
 
-        $products = Product::with(['type', 'category'])
-        ->search($search)
-        ->orderBy('id', 'desc')
-        ->paginate(5)
-        ->withQueryString();
-        $categories = Category::all('id','name');
-        $types = Type::all('id','name');
-        
-        return Inertia::render('Admin/Products/Index', [
-            'products' => $products,
-            'categories' => $categories,
-            'types' => $types,
-            'searchTerm' => $search,
+        try {
+            $products = Product::with(['type', 'category'])
+            ->search($search)
+            ->orderBy('id', 'desc')
+            ->paginate(5)
+            ->withQueryString();
+            $categories = Category::all('id','name');
+            $types = Type::all('id','name');
             
-        ]);
+            return Inertia::render('Admin/Products/Index', [
+                'products' => $products,
+                'categories' => $categories,
+                'types' => $types,
+                'searchTerm' => $search,
+                
+            ]);
+        } catch (\Exception $e) {
+            return back()->withErrors('Error al obtener producto.');
+        }
     }
     
     /**
@@ -45,12 +48,16 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::all('id','name');
-        $types = Type::all('id','name');
-        return Inertia::render('Admin/Products/Create', [
-            'categories' => $categories,
-            'types' => $types,
-        ]);
+        try {
+            $categories = Category::all('id','name');
+            $types = Type::all('id','name');
+            return Inertia::render('Admin/Products/Create', [
+                'categories' => $categories,
+                'types' => $types,
+            ]);
+        } catch (\Exception $e) {
+            return back()->withErrors('Error al obtener types y categories.');
+        }
     }
 
     /**
@@ -73,25 +80,27 @@ class ProductController extends Controller
            'image_url' =>  'nullable|image|mimes:jpeg,png,jpg|max:2048',
            'category_id' => 'required|integer',
            'type_id' => 'required|integer',
-      ]);    
+        ]);    
       
-      $fields['offer'] = $request->has('offer') ? $request->input('offer') : false;
-      $fields['stock'] = $request->has('stock') ? $request->input('stock') : false; 
+        $fields['offer'] = $request->has('offer') ? $request->input('offer') : false;
+        $fields['stock'] = $request->has('stock') ? $request->input('stock') : false; 
       
-       try {
-           if($request->hasFile('image_url')){
+        try {
+            if($request->hasFile('image_url')){
                $filename = time() . '_' . $request->file('image_url')->getClientOriginalName();
                $fields['image_url'] = Storage::disk('public')->putFileAs('image_url', $request->file('image_url'), $filename);     
-           }else {
+            }else {
                $fields['image_url'] = 'image_url/default.jpeg';
-           }
-       } catch (\Exception $e) {
-           return back()->withErrors('Error al subir la imagen.');
-       }
-     
-       Product::create($fields);
-
-       return redirect()->route('products.index')->with('greet', 'El registro se ha guardado exitosamente.');
+            }
+        } catch (\Exception $e) {
+            return back()->withErrors('Error al subir la imagen.');
+        }
+        try {        
+            Product::create($fields);
+            return redirect()->route('products.index')->with('greet', 'El registro se ha guardado exitosamente.');
+        } catch (\Exception $e) {
+            return back()->withErrors('Error al crear producto.');
+        }
 
     }
 
@@ -165,8 +174,12 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return back()->withErrors('Error al subir la imagen.');
         }
-        $product->update($fields); 
-        return redirect()->route('products.index')->with('greet', 'El registro se ha actualizado exitosamente.');
+        try {
+            $product->update($fields); 
+            return redirect()->route('products.index')->with('greet', 'El registro se ha actualizado exitosamente.');
+        } catch (\Exception $e) {
+            return back()->withErrors('Error al actualizar producto.');
+        }
     }
     
 
@@ -176,12 +189,15 @@ class ProductController extends Controller
     public function destroy($id)
     {
         sleep(1);
-        $product = Product::findOrFail($id);
-        if ($product->image_url !== '/image_url/default.jpeg' && $product->image_url !== 'image_url/default.jpeg' ) {
-            Storage::disk('public')->delete($product->image_url);
-        }
-        $product->delete();
-        return redirect()->route('products.index')->with('greet', 'El producto '.$product->catalog_id.' ha sido eliminado exitosamente.');
+        try {
+            $product = Product::findOrFail($id);
+            if ($product->image_url !== '/image_url/default.jpeg' && $product->image_url !== 'image_url/default.jpeg' ) {
+                Storage::disk('public')->delete($product->image_url);
+            }
+            $product->delete();
+            return redirect()->route('products.index')->with('greet', 'El producto '.$product->catalog_id.' ha sido eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return back()->withErrors('Error al eliminar producto.');
+        }      
     }
-
 }

@@ -53,8 +53,6 @@ const submit = () => {
 <template>
 
     <Head title="Admin" />
-    <!--    <div class="w-full max-w-4xl mx-auto">
-        <form @submit.prevent="submit" class="p-4 rounded-md ring-1 ring-slate-300"> -->
     <div class="w-full max-w-4xl mx-auto">
         <form @submit.prevent="submit" class="p-4 rounded-md ring-1 ring-slate-300">
             <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Cargar Producto</label>

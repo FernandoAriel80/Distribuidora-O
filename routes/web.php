@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\TypeController;
+use App\Http\Controllers\EmployeeController;
 //use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Type;
@@ -43,6 +42,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/edit', [ProductController::class, 'edit'])->name('products.edit');
             Route::post('/edit/{id}', [ProductController::class, 'update']);
 
+        });
+        Route::prefix('employees')->group(function(){
+            Route::get('/',[EmployeeController::class, 'index'])->name('employees.index');
+            Route::post('/create', [EmployeeController::class,'store'])->name('employees.store');
         });
     });
 });

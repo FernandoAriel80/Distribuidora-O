@@ -15,4 +15,8 @@ export default {
         //update: (id) =>`/admin/products/edit/${id}`,
         delete:(id) => `/admin/products/${id}`,
     },
+    employees:{
+        index:'/admin/employees',
+        create:'/admin/employees/create',
+    }
 };
