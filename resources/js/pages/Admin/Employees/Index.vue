@@ -1,7 +1,11 @@
 <script setup>
-import { ref, defineProps, watch } from 'vue';
+import { ref, defineProps, watch, } from 'vue';
+import {router } from '@inertiajs/vue3'; 
 import CreateEmployee from '../Employees/Create.vue'
+import routes from '../../../router';
 import Modal from '../../Components/Modal.vue';
+import ModalAsk from '../../Components/ModalAsk.vue';
+import EditEmployee from './Update.vue';
 
 const props = defineProps({
     employees: {
@@ -10,10 +14,49 @@ const props = defineProps({
     }
 });
 
-const showModalCreate = ref(false);
-//const showModalEdit = ref(false);
 const showFlash = ref(true);
+//modal destroy
+const showAlert = ref(false);
+const modalAsk = ref(false);
+const current_id = ref();
 
+const openModalAlert = (id) =>{
+    showAlert.value = true;
+    showFlash.value = true;
+    current_id.value = id;
+}
+const closeModalAlert = () =>{
+    showAlert.value = false;
+}
+const closeModalAlertYes = () =>{
+    modalAsk.value = true;
+    showFlash.value = false;
+    deleteEmployee(current_id.value, modalAsk.value );
+    closeModalAlert();
+}
+const closeModalAlertNo = () =>{
+    modalAsk.value = false;
+    showFlash.value = true;
+    closeModalAlert();
+}
+
+const deleteEmployee = (id, ask) => {
+    if (ask == true) {
+        router.delete(routes.employees.delete(id), {
+            onSuccess: () => {
+            },
+            onError: (error) => {
+                console.error(error);
+            },
+        });
+    }
+};
+
+//modal create and edit 
+const showModalCreate = ref(false);
+const showModalEdit = ref(false);
+const current_objet = ref();
+//create
 const openModalCreate = () => {
     showModalCreate.value = true;
     showFlash.value = true;
@@ -24,9 +67,19 @@ const closeModalCreate = () => {
     showFlash.value = false;
 };
 
+//edit
+const openModalEdit = (objet) => { 
+    current_objet.value = objet;
+    showModalEdit.value = true;
+    showFlash.value = true;
+};
+const closeModalEdit = () => {
+    showModalEdit.value = false;
+    showFlash.value = false;
+};
 const closeFlashAndModal = () => {
     showModalCreate.value = false;
-    //showModalEdit.value = false;
+    showModalEdit.value = false;
     showFlash.value = true;
 }
 
@@ -45,10 +98,18 @@ function formatDate(dateString) {
     <p v-if="showFlash == false && $page.props.flash.greet" class="p-4 bg-green-200">{{ $page.props.flash.greet }}</p>
     <!-- Modal -->
     <div>
-        <button @click="openModalCreate" class="px-4 py-2 bg-blue-500 text-white rounded">Crea empleado</button>
+        <button @click="openModalCreate" class="px-4 py-2 bg-blue-500 text-white rounded">Crear empleado</button>
         <Modal :isOpen="showModalCreate" :closeModal="closeFlashAndModal">
             <CreateEmployee @actionExecuted="closeModalCreate" />
         </Modal>
+    </div>
+    <div v-if="current_objet">                 
+            <Modal :isOpen="showModalEdit" :closeModal="closeFlashAndModal">
+                <EditEmployee :employees="current_objet" @actionExecuted="closeModalEdit" />
+            </Modal>       
+    </div>
+    <div>
+        <ModalAsk :isOpen="showAlert" :closeNo="closeModalAlertNo" :closeYes="closeModalAlertYes" message="Esta seguro de eliminar este producto?"/>
     </div>
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Lista de Empleados</h1>
@@ -82,16 +143,19 @@ function formatDate(dateString) {
                             <td class="px-2 py-3 text-sm text-gray-500">{{ empolyee.email }}</td>
                             <td class="px-2 py-3 text-sm text-gray-500">{{ formatDate(empolyee.created_at) }}</td>
                             <td class="px-2 py-3 text-sm text-gray-500">{{ formatDate(empolyee.updated_at) }}</td>
-                            <!-- <td class="px-4 py-3 text-sm text-gray-500">
-                            <button @click="openModalEdit(product.id)"
-                                class="bg-blue-500 text-white px-3 py-1 rounded text-xs">
-                                Editar
-                            </button>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-500">
-                            <button @click="openModalAlert(product.id)"
-                                class="bg-red-500 text-white px-3 py-1 rounded text-xs">Eliminar</button>
-                        </td> -->
+                            <td class="px-4 py-3 text-sm text-gray-500">
+                                <button @click="openModalEdit(empolyee)"
+                                    class="bg-blue-500 text-white px-3 py-1 rounded text-xs">
+                                    Editar
+                                </button>
+                            </td>
+                          
+                            <td class="px-4 py-3 text-sm text-gray-500">
+                                <button @click="openModalAlert(empolyee.id)"
+                                    class="bg-red-500 text-white px-3 py-1 rounded text-xs">Eliminar</button>
+                                    
+                            </td>
+
                         </tr>
                     </tbody>
                 </table>

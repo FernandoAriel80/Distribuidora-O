@@ -39,13 +39,16 @@ Route::middleware('auth')->group(function () {
             Route::post('/create', [ProductController::class, 'store'])->name('products.store');
 
             Route::inertia('/edit', 'Admin/Products/Edit')->name('products.edit'); 
-            Route::get('/edit', [ProductController::class, 'edit'])->name('products.edit');
+            //Route::get('/edit', [ProductController::class, 'edit'])->name('products.edit');
             Route::post('/edit/{id}', [ProductController::class, 'update']);
 
         });
         Route::prefix('employees')->group(function(){
             Route::get('/',[EmployeeController::class, 'index'])->name('employees.index');
             Route::post('/create', [EmployeeController::class,'store'])->name('employees.store');
+            Route::delete('/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+            Route::post('/update/{id}', [ProductController::class, 'update']);
+
         });
     });
 });

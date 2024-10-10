@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\User;
 use Inertia\Inertia;
 
@@ -79,14 +80,49 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        sleep(1);
+        try {
+
+            $user = User::findOrFail($id);
+            dd($user);
+            $fields = $request->validate([
+                'name' => 'max:255',
+                'email' => ['email', 'max:255', Rule::unique('users')->ignore($user->id)],
+                'password' => 'nullable|confirmed|min:8',
+            ]);
+            
+            $data = [
+                'name' => $fields['name'],
+                'email' => $fields['email'],
+                'rol' => 'admin',
+            ];
+            
+            if (!empty($fields['password'])) {
+                $data['password'] = bcrypt($fields['password']);
+            }
+    
+            $user->update($data);
+    
+            return redirect()->route('employees.index')->with('greet', 'Los datos del empleado se han actualizado exitosamente.');
+        } catch (\Exception $e) {
+            return back()->withErrors('Error al actualizar los datos del empleado.');
+        }
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        sleep(1);
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
+            return redirect()->route('employees.index')->with('greet', 'El empleado '.$user->name.' ha sido eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return back()->withErrors('Error al eliminar empleado.');
+        }      
     }
 }
+

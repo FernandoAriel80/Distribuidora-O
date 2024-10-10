@@ -44,18 +44,18 @@ watch(search, () => {
 
 //delete
 
+const current_id = ref();
+const current_objet = ref();
 //showModal
-const showModalCreate = ref(false);
-const showModalEdit = ref(false);
 const showFlash = ref(true);
 const showAlert = ref(false);
 const modalAsk = ref(false);
-const curren_id = ref();
 
+//modal destroy
 const openModalAlert = (id) =>{
     showAlert.value = true;
     showFlash.value = true;
-    curren_id.value = id;
+    current_id.value = id;
 }
 const closeModalAlert = () =>{
     showAlert.value = false;
@@ -63,7 +63,7 @@ const closeModalAlert = () =>{
 const closeModalAlertYes = () =>{
     modalAsk.value = true;
     showFlash.value = false;
-    deleteProduct(curren_id.value, modalAsk.value );
+    deleteProduct(current_id.value, modalAsk.value );
     closeModalAlert();
 }
 const closeModalAlertNo = () =>{
@@ -76,9 +76,6 @@ const deleteProduct = (id, ask) => {
     if (ask == true) {
         router.delete(routes.products.delete(id), {
             onSuccess: () => {
-                /* Inertia.reload({ 
-                only: ['products'], 
-            }); */
             },
             onError: (error) => {
                 console.error(error);
@@ -86,6 +83,10 @@ const deleteProduct = (id, ask) => {
         });
     }
 };
+
+//modal create and edit
+const showModalCreate = ref(false);
+const showModalEdit = ref(false);
 
 const openModalCreate = () => {
     showModalCreate.value = true;
@@ -97,8 +98,8 @@ const closeModalCreate = () => {
     showFlash.value = false;
 };
 
-const openModalEdit = (id) => { 
-    curren_id.value = id;
+const openModalEdit = (objet) => { 
+    current_objet.value = objet;
     showModalEdit.value = true;
     showFlash.value = true;
 };
@@ -126,12 +127,10 @@ const closeFlashAndModal = ()=>{
             <CreateProduct :categories="props.categories" :types="props.types" @actionExecuted="closeModalCreate" />
         </Modal>
     </div>
-    <div v-for="product in products.data" :key="product.id">
-        <div v-if="product.id == curren_id">           
+    <div v-if="current_objet">             
             <Modal :isOpen="showModalEdit" :closeModal="closeFlashAndModal">
-                <EditProduct :products="product" :categories="props.categories" :types="props.types" @actionExecuted="closeModalEdit" />
-            </Modal>
-        </div>
+                <EditProduct :products="current_objet" :categories="props.categories" :types="props.types" @actionExecuted="closeModalEdit" />
+            </Modal>  
     </div>
     <div>
         <ModalAsk :isOpen="showAlert" :closeNo="closeModalAlertNo" :closeYes="closeModalAlertYes" message="Esta seguro de eliminar este producto?"/>
@@ -198,9 +197,8 @@ const closeFlashAndModal = ()=>{
                             <td class="px-2 py-3 text-sm text-gray-500">{{ product.category.name }}</td>
                             <td class="px-2 py-3 text-sm text-gray-500">{{ product.type.name }}</td>
                             <td class="px-2 py-3 text-sm text-gray-500">
-                                <button @click="openModalEdit(product.id)"
+                                <button @click="openModalEdit(product)"
                                     class="bg-blue-500 text-white px-3 py-1 rounded text-xs">
-                                    <!-- <Link :href="routes.products.edit(product.id)">Editar</Link> -->
                                     Editar
                                 </button>
                             </td>

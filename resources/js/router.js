@@ -18,5 +18,7 @@ export default {
     employees:{
         index:'/admin/employees',
         create:'/admin/employees/create',
+        update:(id) => `/admin/employees/update/${id}`,
+        delete:(id) => `/admin/employees/${id}`,
     }
 };
