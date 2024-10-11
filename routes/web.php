@@ -38,9 +38,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/create', [ProductController::class, 'create'])->name('products.create');
             Route::post('/create', [ProductController::class, 'store'])->name('products.store');
 
-            Route::inertia('/edit', 'Admin/Products/Edit')->name('products.edit'); 
-            //Route::get('/edit', [ProductController::class, 'edit'])->name('products.edit');
-            Route::post('/edit/{id}', [ProductController::class, 'update']);
+            Route::inertia('/update', 'Admin/Products/Update')->name('products.update'); 
+            Route::post('/update/{id}', [ProductController::class, 'update']);
 
         });
         Route::prefix('employees')->group(function(){

@@ -47,7 +47,7 @@ const change = (e) => {
     srcImg.value = URL.createObjectURL(e.target.files[0]);
 };
 const submit = () => {
-    form.post(routes.products.edit(props.products.id), {
+    form.post(routes.products.update(props.products.id), {
         onSuccess: () => {
             emit('actionExecuted');
         },

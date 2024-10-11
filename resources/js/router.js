@@ -11,8 +11,7 @@ export default {
     products: {
         index: '/admin/products',
         create: '/admin/products/create',
-        edit: (id) => `/admin/products/edit/${id}`,
-        //update: (id) =>`/admin/products/edit/${id}`,
+        update: (id) => `/admin/products/update/${id}`,
         delete:(id) => `/admin/products/${id}`,
     },
     employees:{

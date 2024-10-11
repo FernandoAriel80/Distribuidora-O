@@ -1,11 +1,11 @@
 <script setup>
 import { ref, defineProps, watch, } from 'vue';
 import {router } from '@inertiajs/vue3'; 
-import CreateEmployee from '../Employees/Create.vue'
+import CreateEmployee from './Create.vue'
 import routes from '../../../router';
 import Modal from '../../Components/Modal.vue';
 import ModalAsk from '../../Components/ModalAsk.vue';
-import EditEmployee from './Update.vue';
+import UpdateEmployee from './Update.vue';
 
 const props = defineProps({
     employees: {
@@ -105,7 +105,7 @@ function formatDate(dateString) {
     </div>
     <div v-if="current_objet">                 
             <Modal :isOpen="showModalEdit" :closeModal="closeFlashAndModal">
-                <EditEmployee :employees="current_objet" @actionExecuted="closeModalEdit" />
+                <UpdateEmployee :employees="current_objet" @actionExecuted="closeModalEdit" />
             </Modal>       
     </div>
     <div>

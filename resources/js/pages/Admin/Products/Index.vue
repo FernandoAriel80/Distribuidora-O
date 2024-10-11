@@ -5,8 +5,8 @@ import Pagination from '../../Components/Pagination.vue';
 import SearchInput from '../../Components/SearchInput.vue';
 import Modal from '../../Components/Modal.vue';
 import ModalAsk from '../../Components/ModalAsk.vue';
-import CreateProduct from '../Products/Create.vue'
-import EditProduct from '../Products/Edit.vue'
+import CreateProduct from './Create.vue'
+import UpdateProduct from './Update.vue'
 import routes from '../../../router';
 import { ref, defineProps, watch } from 'vue';
 import {router } from '@inertiajs/vue3'; 
@@ -129,7 +129,7 @@ const closeFlashAndModal = ()=>{
     </div>
     <div v-if="current_objet">             
             <Modal :isOpen="showModalEdit" :closeModal="closeFlashAndModal">
-                <EditProduct :products="current_objet" :categories="props.categories" :types="props.types" @actionExecuted="closeModalEdit" />
+                <UpdateProduct :products="current_objet" :categories="props.categories" :types="props.types" @actionExecuted="closeModalEdit" />
             </Modal>  
     </div>
     <div>
