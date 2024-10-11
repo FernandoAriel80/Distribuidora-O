@@ -113,8 +113,6 @@ const closeFlashAndModal = ()=>{
     showFlash.value = true;
 }
 
-// Ocultar el mensaje después de unos segundos
-
 </script>
 <template>
 

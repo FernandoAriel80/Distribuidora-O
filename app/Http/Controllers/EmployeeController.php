@@ -12,18 +12,31 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $request->validate([
+            'search' => 'nullable|string|max:255',
+        ]);
+    
+        $search = (string) $request->input('search', '');
+    
         try {
-            $employees = User::where('rol','=','admin')->get();        
-            //dd($employees);
-            return Inertia::render('Admin/Employees/Index',[
+            $employees = User::search($search)->get();
+    
+            if (!empty($search)) {
+                dd($search); 
+                dd($employees);  
+            }
+    
+            return Inertia::render('Admin/Employees/Index', [
                 'employees' => $employees,
+                'searchTerm' => $search,
             ]);
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             return back()->withErrors('Error al obtener empleados.');
         }
     }
+    
 
     /**
      * Show the form for creating a new resource.

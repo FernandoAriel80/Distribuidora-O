@@ -16,6 +16,21 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    public function scopeSearch($query, $search)
+    {
+
+        $query->where('rol', '=', 'admin');
+ 
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('catalog_id', 'like', "%{$search}%");
+            });
+        }
+        return $query;
+    }
+
+    
     protected $table = 'users';
     protected $primarykey = 'id';
     protected $fillable = [
