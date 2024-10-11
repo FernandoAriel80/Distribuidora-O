@@ -24,7 +24,7 @@ class User extends Authenticatable
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('catalog_id', 'like', "%{$search}%");
+                ->orWhere('email', 'like', "%{$search}%");
             });
         }
         return $query;
