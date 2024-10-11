@@ -20,7 +20,7 @@ const form = useForm({
 });
 
 const emit = defineEmits(['actionExecuted']);
-console.log(props.employees.id);
+
 const submit = () => {
     form.post(routes.employees.update(props.employees.id), {
         onSuccess: () => {
@@ -42,7 +42,6 @@ const submit = () => {
                 <TextInput name="Correo" type="email" v-model="form.email" :message="form.errors.email" />
                 <TextInput name="Contraseña" type="password" v-model="form.password" :message="form.errors.password" />
                 <TextInput name="Confirmar Contraseña" type="password" v-model="form.password_confirmation" :message="form.errors.password_confirmation" />
-
                 <div>
                    <FormButton :name="'Registrar'" :progress="form.progress" />
                 </div>

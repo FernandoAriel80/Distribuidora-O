@@ -82,9 +82,8 @@ class EmployeeController extends Controller
     {
         sleep(1);
         try {
-
             $user = User::findOrFail($id);
-            dd($user);
+            
             $fields = $request->validate([
                 'name' => 'max:255',
                 'email' => ['email', 'max:255', Rule::unique('users')->ignore($user->id)],
