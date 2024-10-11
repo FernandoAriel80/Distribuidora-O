@@ -3,26 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\EmployeeController;
-//use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
-use App\Models\Type;
-use Inertia\Inertia;
-
-/* Route::middleware('auth')->group(function(){
-    Route::post('/logout',[AuthController::class,'logout'])->name('auth.logout');
-
-    Route::inertia('/admin', 'Admin/Menu')->name('admin.menu');
-
-    Route::inertia('/create', 'Admin/Products/Index')->name('products.index');
-    Route::inertia('/create', 'Admin/Products/Create')->name('products.create');
-    Route::get('/create',[ProductController::class, 'index']);
-    Route::post('/create',[ProductController::class, 'store']);
-
-    
-    // Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
-
-   
-}); */
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
