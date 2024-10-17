@@ -5,47 +5,46 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
+// authenticated routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     Route::prefix('admin')->group(function () {
         Route::inertia('/', 'Admin/Menu')->name('admin.menu');
 
-        Route::prefix('products')->group(function () {
-            //Route::inertia('/create', 'Admin/Products/Create')->name('products.create'); 
-            Route::get('/', [ProductController::class, 'index'])->name('products.index'); 
-            Route::delete('/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
-
-            Route::get('/create', [ProductController::class, 'create'])->name('products.create');
-            Route::post('/create', [ProductController::class, 'store'])->name('products.store');
-
-            Route::inertia('/update', 'Admin/Products/Update')->name('products.update'); 
-            Route::post('/update/{id}', [ProductController::class, 'update']);
-
+        //only admin
+        Route::middleware('is_admin:admin,super_admin')->group(function () {
+            Route::prefix('products')->group(function () {
+                Route::get('/', [ProductController::class, 'index'])->name('products.index');
+                Route::delete('/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+                Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+                Route::post('/create', [ProductController::class, 'store'])->name('products.store');
+                Route::inertia('/update', 'Admin/Products/Update')->name('products.update');
+                Route::post('/update/{id}', [ProductController::class, 'update']);
+            });
         });
-        Route::prefix('employees')->group(function(){
-            Route::get('/',[EmployeeController::class, 'index'])->name('employees.index');
-            Route::post('/create', [EmployeeController::class,'store'])->name('employees.store');
-            Route::delete('/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
-            Route::post('/update/{id}', [EmployeeController::class, 'update']);
 
+        //only super admin
+        Route::middleware('is_admin:super_admin')->group(function () {
+            Route::prefix('employees')->group(function(){
+                Route::get('/',[EmployeeController::class, 'index'])->name('employees.index');
+                Route::post('/create', [EmployeeController::class,'store'])->name('employees.store');
+                Route::delete('/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+                Route::post('/update/{id}', [EmployeeController::class, 'update']);
+    
+            });
         });
+
     });
 });
 
-
-
-Route::inertia('/','Home')->name('home');
+// public routes
+Route::inertia('/', 'Home')->name('home');
 
 Route::middleware('guest')->group(function(){
-    Route::inertia('/register','Auth/Register')->name('auth.register');
-    Route::post('/register',[AuthController::class,'register']);
+    Route::inertia('/register', 'Auth/Register')->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
     
-    Route::inertia('/login','Auth/Login')->name('auth.login');
-    Route::post('/login',[AuthController::class,'login']);
-
-   /*  Route::inertia('/create','Admin/Products/Create'); */
-
+    Route::inertia('/login', 'Auth/Login')->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
 });
-
-

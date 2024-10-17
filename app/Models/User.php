@@ -19,7 +19,7 @@ class User extends Authenticatable
     public function scopeSearch($query, $search)
     {
 
-        $query->where('rol', '=', 'admin');
+        $query->where('role', '=', 'admin');
  
         if ($search) {
             $query->where(function($q) use ($search) {
@@ -36,7 +36,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'rol',
+        'role',
     ];
 
     /**

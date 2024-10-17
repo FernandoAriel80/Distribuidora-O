@@ -19,7 +19,7 @@ class EmployeeController extends Controller
         ]);
     
         $search = (string) $request->input('search', '');
-    
+        
         try {
             $employees = User::search($search)->get(); 
             return Inertia::render('Admin/Employees/Index', [
