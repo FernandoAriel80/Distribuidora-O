@@ -23,14 +23,13 @@ class HomeController extends Controller
             $products = Product::with(['type', 'category'])
             ->search($search)
             ->orderBy('id', 'desc')
-            ->paginate(5)
-            ->withQueryString();
-            
-            return Inertia::render('Admin/Products/Index', [
+            ->get();
+            //dd($products);
+            return Inertia::render('Home', [
                 'products' => $products,
                 'searchTerm' => $search,
                 
-            ]);
+            ]); 
         } catch (\Exception $e) {
             return back()->withErrors('Error al obtener producto.');
         }
