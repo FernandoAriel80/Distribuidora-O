@@ -115,23 +115,10 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-  /*   public function edit(Request $request)
+    public function edit(Request $request)
     {
-        try {
-            $id = (int) $request->input('idUpdate');
-            dd($id);
-            $product = Product::findOrFail($id);
-            $categories = Category::all('id','name');
-            $types = Type::all('id','name');
-            return Inertia::render('Admin/Products/Index', [
-                'products' => $product,
-                'categories'=> $categories,
-                'types' => $types,
-            ]);
-        } catch (\Exception $e) {
-            return redirect()->route('Admin/Products/Index')->withErrors('Error: El producto no fue encontrado.');
-        }
-    } */
+        //
+    }
     
 
     /**

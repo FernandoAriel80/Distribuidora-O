@@ -3,7 +3,20 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+
+// public routes
+Route::inertia('/', 'Home')->name('home');
+//Route::get('/',[HomeController::class,'index'])->name('home.index');
+
+Route::middleware('guest')->group(function(){
+    Route::inertia('/register', 'Auth/Register')->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+    
+    Route::inertia('/login', 'Auth/Login')->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+});
 
 // authenticated routes
 Route::middleware('auth')->group(function () {
@@ -38,13 +51,3 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-// public routes
-Route::inertia('/', 'Home')->name('home');
-
-Route::middleware('guest')->group(function(){
-    Route::inertia('/register', 'Auth/Register')->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
-    
-    Route::inertia('/login', 'Auth/Login')->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
-});
