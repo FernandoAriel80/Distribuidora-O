@@ -23,7 +23,7 @@ class RoleMiddleware
         $user = Auth::user();
   
         if (!in_array($user->role, $role)) {
-            return redirect()->route('home'); 
+            return redirect()->route('home.index'); 
         }
     
         return $next($request);
