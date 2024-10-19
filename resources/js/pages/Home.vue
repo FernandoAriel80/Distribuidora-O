@@ -1,7 +1,8 @@
 <script setup>
 import Layout from '../Layout/Layout.vue';
 import SearchInput from './Components/SearchInput.vue';
-import { defineProps, ref, watch, onMounted,onBeforeUnmount  } from 'vue';
+import Pagination from './Components/Pagination.vue';
+import { defineProps, ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
 
@@ -18,25 +19,33 @@ const props = defineProps({
    },
    searchTerm: String,
    categoryTerm: String,
-   typeTerm: String,
    sortOrder: String
 });
 
 //search
 const search = ref(props.searchTerm || '');
 const category = ref(props.categoryTerm || '');
-const type = ref(props.typeTerm || '');
 const sort = ref(props.sortOrder || 'asc');
 
 const searchDebounced = debounce(() => {
-   router.reload({
-      only: ['products'], data: {
-         search: search.value,
-         category: category.value,
-         type: type.value,
-         sort: sort.value
-      }, preserveState: true, preserveScroll: true,
-   })
+   if (search == props.searchTerm) {
+      router.reload({
+         only: ['products'], data: {
+            search: search.value,
+            category: category.value,
+            sort: sort.value
+         }, preserveState: true, preserveScroll: true,
+      })
+   } else {
+      router.reload({
+         only: ['products'], data: {
+            page: 1, 
+            search: search.value,
+            category: category.value,
+            sort: sort.value
+         }, preserveState: true, preserveScroll: true,
+      })
+   }
 }, 300)
 
 watch(search, () => {
@@ -51,55 +60,7 @@ watch(category, () => {
 
 
 /////////////////////////////////////////////////
-const products = ref([...props.products.data]); // Inicializa con los productos cargados
-const currentPage = ref(props.products.current_page); // Página actual
-const lastPage = ref(props.products.last_page); // Última página
-const loading = ref(false); // Para el estado de carga
 
-// Función para cargar más productos al hacer scroll
-const loadMoreProducts = async () => {
-  if (loading.value || currentPage.value >= lastPage.value) return;
-
-  loading.value = true;
-  const nextPage = currentPage.value + 1;
-
-  // Realiza la petición para la siguiente página
-  await router.reload({
-    data: {
-      page: nextPage,
-      search: props.searchTerm,
-      category: props.categoryTerm
-    },
-    only: ['products'], // Solo actualiza los productos
-    preserveState: true,
-    preserveScroll: true,
-    onSuccess: (page) => {
-      products.value.push(...page.props.products.data); // Añadir los nuevos productos a los existentes
-      currentPage.value = page.props.products.current_page; // Actualizar la página actual
-      loading.value = false;
-    }
-  });
-};
-
-// Detectar el scroll
-const handleScroll = () => {
-  const scrollPosition = window.innerHeight + window.scrollY;
-  const bottomPosition = document.documentElement.offsetHeight - 100;
-
-  if (scrollPosition >= bottomPosition && !loading.value) {
-    loadMoreProducts();
-  }
-};
-
-// Montar el listener de scroll cuando se carga el componente
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
-});
-
-// Remover el listener cuando se desmonte el componente
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScroll);
-});
 </script>
 
 <template>
@@ -155,14 +116,15 @@ onBeforeUnmount(() => {
                         <div class="p-2">
                            <h2 class="text-sm font-semibold text-gray-800 mb-1">{{ product.name }}</h2>
                            <p class="text-gray-500 text-xs mb-1">{{ product.description }}</p>
-                           <div v-if="product.unit_price" class="flex items-center justify-between mb-2">
+                           <div v-if="product.price_offer"  class="flex items-center justify-between mb-2">
+                              <span class="text-gray-800 font-bold text-xs">Unidad: $<p class="line-through">{{ product.unit_price }}</p></span>
+                       
+                              <span class="text-green-600 font-bold text-xs">Oferta: ${{ product.price_offer }}</span>
+                           </div>
+                           <div v-else class="flex items-center justify-between mb-2">
                               <span class="text-gray-800 font-bold text-xs">Unidad: ${{ product.unit_price }}</span>
                               <span v-if="product.bulk_unit_price" class="text-gray-800 font-bold text-xs">Bulto: ${{
                                  product.bulk_unit_price }}</span>
-                           </div>
-                           <div v-else class="flex items-center justify-between mb-2">
-                              <span class="text-green-600 font-bold text-xs">Oferta: ${{ product.price_offer }}</span>
-                              <span class="text-gray-500 text-xs">Stock: {{ product.stock > 0 ? 'Sí' : 'No' }}</span>
                            </div>
                            <div v-if="product.unit_price" class="flex items-center justify-between mb-2">
                               <span class="text-gray-500 text-xs">Stock: {{ product.stock > 0 ? 'Sí' : 'No' }}</span>
@@ -177,10 +139,11 @@ onBeforeUnmount(() => {
                         </button>
                      </div>
                   </div>
-                  <!-- Mostrar el indicador de carga mientras se solicitan más productos -->
-                  <div v-if="loading" class="text-center my-4">
-                     <p>Cargando más productos...</p>
-                  </div>
+
+               </div>
+
+               <div>
+                  <Pagination class="mt-4" :links="products.links" />
                </div>
             </section>
          </div>

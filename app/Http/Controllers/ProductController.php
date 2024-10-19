@@ -80,8 +80,13 @@ class ProductController extends Controller
            'image_url' =>  'nullable|image|mimes:jpeg,png,jpg|max:2048',
            'category_id' => 'required|integer',
            'type_id' => 'required|integer',
+        ],[
+            'name.required' => 'El nombre es requerido',
+            'catalog_id.required' => 'El id del catalogo es requerido',
         ]);    
-      
+        if (empty($fields['unit_price'])) {
+            $fields['unit_price'] = $fields['price_offer'];
+        }
         $fields['offer'] = $request->has('offer') ? $request->input('offer') : false;
         $fields['stock'] = $request->has('stock') ? $request->input('stock') : false; 
       

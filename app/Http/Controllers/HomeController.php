@@ -37,9 +37,8 @@ class HomeController extends Controller
             }
 
             $query->orderBy('unit_price', $sort);
-               // Paginación: 10 productos por página
-            $products = $query->paginate(5);
-            //$products = $query->get();
+
+            $products = $query->paginate(10)->withQueryString();
             $categories = Category::all('id','name');
             //dd($products);
             return Inertia::render('Home', [

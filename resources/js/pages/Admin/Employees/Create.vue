@@ -11,6 +11,7 @@ const form = useForm({
     password_confirmation: null,
 });
 
+console.log(routes.employees.create);
 const emit = defineEmits(['actionExecuted']);
 
 const submit = () => {
@@ -36,7 +37,7 @@ const submit = () => {
                 <TextInput name="Confirmar Contraseña" type="password" v-model="form.password_confirmation" :message="form.errors.password_confirmation" />
 
                 <div>
-                   <FormButton :name="'Registrar'" :progress="form.progress" />
+                   <FormButton :name="'Registrar'"  />
                 </div>
             </div>
         </form>

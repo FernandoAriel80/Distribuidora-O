@@ -51,15 +51,20 @@ class EmployeeController extends Controller
                 'name' => 'required|max:255',
                 'email' => 'required|email|max:255|unique:users',
                 'password' => 'required|confirmed|min:8',
+            ],[
+                'name.required' => 'El nombre es requerido',
+                'email.required' => 'El email es requerido',
+                'password.required' => 'El password es requerido'
             ]);
             
+            //dd($validated);
             User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => bcrypt($validated['password']),
-                'rol' => 'admin',
+                'role' => 'admin',
             ]);
-            
+             //dd($validated);
             return redirect()->route('employees.index')->with('greet', 'El empleado se a creado exitosamente.');
         }catch (\Exception $e) {
             return back()->withErrors('Error al crear empleado.');
@@ -100,7 +105,7 @@ class EmployeeController extends Controller
             $data = [
                 'name' => $fields['name'],
                 'email' => $fields['email'],
-                'rol' => 'admin',
+                'role' => 'admin',
             ];
             
             if (!empty($fields['password'])) {
