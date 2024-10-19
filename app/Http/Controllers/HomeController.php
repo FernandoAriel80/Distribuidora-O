@@ -17,12 +17,12 @@ class HomeController extends Controller
         $request->validate([
             'search' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:255',
-            'sort' => 'nullable|in:asc,desc'
+            'sort' => 'nullable|'
         ]);
     
         $search = (string) $request->input('search', '');
         $category = (string) $request->input('category', '');
-        $sort = $request->input('sort', 'asc');
+        $sort = $request->input('sort','rel');
 
         try {
             $query = Product::with(['type', 'category']);
@@ -35,8 +35,13 @@ class HomeController extends Controller
                     $q->where('name', 'like', '%' . $category . '%');
                 });
             }
-
-            $query->orderBy('unit_price', $sort);
+            if ($sort == 'rel') {
+                $query->orderBy('updated_at', 'desc');
+            }else if ($sort == 'lPrice') {
+                $query->orderBy('unit_price', 'asc');
+            }else if ($sort == 'hPrice') {
+                $query->orderBy('unit_price', 'desc');
+            }
 
             $products = $query->paginate(10)->withQueryString();
             $categories = Category::all('id','name');
