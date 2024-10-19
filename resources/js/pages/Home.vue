@@ -117,7 +117,7 @@ watch(category, () => {
                            <h2 class="text-sm font-semibold text-gray-800 mb-1">{{ product.name }}</h2>
                            <p class="text-gray-500 text-xs mb-1">{{ product.description }}</p>
                            <div v-if="product.price_offer"  class="flex items-center justify-between mb-2">
-                              <span class="text-gray-800 font-bold text-xs">Unidad: $<p class="line-through">{{ product.unit_price }}</p></span>
+                              <span class="text-gray-800 font-bold text-xs">Unidad: $<p class="line-through">{{ product.old_price }}</p></span>
                        
                               <span class="text-green-600 font-bold text-xs">Oferta: ${{ product.price_offer }}</span>
                            </div>

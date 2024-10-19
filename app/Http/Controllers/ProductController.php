@@ -76,6 +76,7 @@ class ProductController extends Controller
            'percent_off' => 'nullable|numeric|between:0,100',
            'offer' => 'nullable|boolean', 
            'price_offer' => 'nullable|numeric|min:0',
+           'old_price' => 'nullable|numeric|min:0',
            'stock' => 'required|boolean',
            'image_url' =>  'nullable|image|mimes:jpeg,png,jpg|max:2048',
            'category_id' => 'required|integer',
@@ -84,8 +85,9 @@ class ProductController extends Controller
             'name.required' => 'El nombre es requerido',
             'catalog_id.required' => 'El id del catalogo es requerido',
         ]);    
-        if (empty($fields['unit_price'])) {
+        if ($fields['offer'] == true) {
             $fields['unit_price'] = $fields['price_offer'];
+            $fields['old_price'] = $fields['unit_price'];
         }
         $fields['offer'] = $request->has('offer') ? $request->input('offer') : false;
         $fields['stock'] = $request->has('stock') ? $request->input('stock') : false; 
@@ -141,6 +143,7 @@ class ProductController extends Controller
             'percent_off' => 'nullable|numeric|between:0,100',
             'offer' => 'nullable|boolean', 
             'price_offer' => 'nullable|numeric|min:0',
+            'old_price' => 'nullable|numeric|min:0',
             'stock' => 'nullable|boolean',
             'image_url' =>  'nullable|image|mimes:jpeg,png,jpg|max:2048', 
             'image_aux' => 'nullable|string',
@@ -148,6 +151,10 @@ class ProductController extends Controller
             'type_id' => 'nullable|integer',
         ]);
 
+        if ($fields['offer'] == true){
+            $fields['old_price'] = $fields['unit_price'];
+            $fields['unit_price'] = $fields['price_offer'];
+        }
         $fields['offer'] = $request->has('offer') ? $request->input('offer') : false;
         $fields['stock'] = $request->has('stock') ? $request->input('stock') : false; 
     

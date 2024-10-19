@@ -15,6 +15,7 @@ const form = useForm({
     percent_off: null,
     offer: false,
     price_offer: null,
+    old_price:null,
     stock: true,
     image_url: null,
     category_id: null,

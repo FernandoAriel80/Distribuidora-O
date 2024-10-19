@@ -33,6 +33,7 @@ class Product extends Model
         'percent_off',
         'offer',
         'price_offer',
+        'old_price',
         'stock',
         'image_url',
         'category_id',

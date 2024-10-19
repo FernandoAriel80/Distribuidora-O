@@ -1,4 +1,3 @@
-
 <script setup>
 import ImagePreview from '../../Components/ImagePreview.vue';
 import Pagination from '../../Components/Pagination.vue';
@@ -9,7 +8,7 @@ import CreateProduct from './Create.vue'
 import UpdateProduct from './Update.vue'
 import routes from '../../../router';
 import { ref, defineProps, watch } from 'vue';
-import {router } from '@inertiajs/vue3'; 
+import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
 
 const props = defineProps({
@@ -52,21 +51,21 @@ const showAlert = ref(false);
 const modalAsk = ref(false);
 
 //modal destroy
-const openModalAlert = (id) =>{
+const openModalAlert = (id) => {
     showAlert.value = true;
     showFlash.value = true;
     current_id.value = id;
 }
-const closeModalAlert = () =>{
+const closeModalAlert = () => {
     showAlert.value = false;
 }
-const closeModalAlertYes = () =>{
+const closeModalAlertYes = () => {
     modalAsk.value = true;
     showFlash.value = false;
-    deleteProduct(current_id.value, modalAsk.value );
+    deleteProduct(current_id.value, modalAsk.value);
     closeModalAlert();
 }
-const closeModalAlertNo = () =>{
+const closeModalAlertNo = () => {
     modalAsk.value = false;
     showFlash.value = true;
     closeModalAlert();
@@ -98,7 +97,7 @@ const closeModalCreate = () => {
     showFlash.value = false;
 };
 
-const openModalEdit = (objet) => { 
+const openModalEdit = (objet) => {
     current_objet.value = objet;
     showModalEdit.value = true;
     showFlash.value = true;
@@ -107,7 +106,7 @@ const closeModalEdit = () => {
     showModalEdit.value = false;
     showFlash.value = false;
 };
-const closeFlashAndModal = ()=>{
+const closeFlashAndModal = () => {
     showModalCreate.value = false;
     showModalEdit.value = false;
     showFlash.value = true;
@@ -120,18 +119,20 @@ const closeFlashAndModal = ()=>{
     <p v-if="showFlash == false && $page.props.flash.greet" class="p-4 bg-green-200">{{ $page.props.flash.greet }}</p>
     <!-- Modal -->
     <div>
-        <button @click="openModalCreate" class="px-4 py-2 bg-blue-500 text-white rounded">Cargar Producto</button>      
+        <button @click="openModalCreate" class="px-4 py-2 bg-blue-500 text-white rounded">Cargar Producto</button>
         <Modal :isOpen="showModalCreate" :closeModal="closeFlashAndModal">
             <CreateProduct :categories="props.categories" :types="props.types" @actionExecuted="closeModalCreate" />
         </Modal>
     </div>
-    <div v-if="current_objet">             
-            <Modal :isOpen="showModalEdit" :closeModal="closeFlashAndModal">
-                <UpdateProduct :products="current_objet" :categories="props.categories" :types="props.types" @actionExecuted="closeModalEdit" />
-            </Modal>  
+    <div v-if="current_objet">
+        <Modal :isOpen="showModalEdit" :closeModal="closeFlashAndModal">
+            <UpdateProduct :products="current_objet" :categories="props.categories" :types="props.types"
+                @actionExecuted="closeModalEdit" />
+        </Modal>
     </div>
     <div>
-        <ModalAsk :isOpen="showAlert" :closeNo="closeModalAlertNo" :closeYes="closeModalAlertYes" message="Esta seguro de eliminar este producto?"/>
+        <ModalAsk :isOpen="showAlert" :closeNo="closeModalAlertNo" :closeYes="closeModalAlertYes"
+            message="Esta seguro de eliminar este producto?" />
     </div>
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Lista de Productos</h1>
@@ -160,6 +161,8 @@ const closeFlashAndModal = ()=>{
                             <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Precio Oferta</th>
                             <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Precio Anterior</th>
+                            <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Stock
                             </th>
                             <th class="px-2 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -186,6 +189,7 @@ const closeFlashAndModal = ()=>{
                                 {{ product.percent_off === null ? product.percent_off : '%' + product.percent_off }}
                             </td>
                             <td class="px-2 py-3 text-sm text-gray-500">{{ product.price_offer }}</td>
+                            <td class="px-2 py-3 text-sm text-gray-500">{{ product.old_price}}</td>
                             <td class="px-2 py-3 text-sm text-gray-500">
                                 {{ product.stock === 1 ? 'SI' : 'NO' }}</td>
                             <td class="px-2 py-3 text-sm text-gray-500">

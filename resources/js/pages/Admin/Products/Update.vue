@@ -32,6 +32,7 @@ const form = useForm({
     percent_off: props.products.percent_off,
     offer: props.products.offer === 1 ? true : false,
     price_offer: props.products.price_offer,
+    old_price:props.products.old_price,
     stock: props.products.stock === 1 ? true : false,
     image_url: null,
     image_aux: props.products.image_url,
