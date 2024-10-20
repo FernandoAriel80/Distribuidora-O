@@ -19,5 +19,9 @@ export default {
         create:'/admin/employees/create',
         update:(id) => `/admin/employees/update/${id}`,
         delete:(id) => `/admin/employees/${id}`,
+    },
+    cart:{
+        index:'/cart',
+        create:'/cart/create',
     }
 };

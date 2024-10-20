@@ -13,6 +13,8 @@ import routes from '../router';
                 <div class="flex space-x-6 ml-auto" v-if="$page.props.auth.user">
                     <Link :href="routes.home">Inicio</Link>
                     <h1 class="title"> {{ $page.props.auth.user.name }}</h1>
+                    <Link :href="routes.cart.index">Carrito</Link>
+                    <h1>{{ routes.cart.index }}</h1>
                     <Link :href="routes.auth.logout" method="post" as="button" type="button" class="nav-link"> Cerrar Sesión</Link>
                     <div v-if="$page.props.auth.user.role === 'admin' || $page.props.auth.user.role === 'super_admin'">
                         <Link :href="routes.admin.menu">Administración</Link>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
@@ -21,6 +22,12 @@ Route::middleware('guest')->group(function(){
 // authenticated routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+    Route::prefix('cart')->group(function(){
+        //Route::inertia('/', 'Cart/Index')->name('cart');
+        Route::get('/',[CartController::class, 'index'])->name('cart.index');
+        Route::post('/create',[CartController::class,'store'])->name('cart.store');
+    });
 
     Route::prefix('admin')->group(function () {
         Route::inertia('/', 'Admin/Menu')->name('admin.menu');
