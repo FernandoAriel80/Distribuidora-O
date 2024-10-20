@@ -24,9 +24,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     Route::prefix('cart')->group(function(){
-        //Route::inertia('/', 'Cart/Index')->name('cart');
         Route::get('/',[CartController::class, 'index'])->name('cart.index');
-        Route::post('/create',[CartController::class,'store'])->name('cart.store');
+        Route::post('/create/{id}',[CartController::class,'store'])->name('cart.store');
+        Route::delete('/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
     });
 
     Route::prefix('admin')->group(function () {

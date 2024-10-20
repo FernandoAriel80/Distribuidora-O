@@ -2,7 +2,8 @@
 import Layout from '../Layout/Layout.vue';
 import SearchInput from './Components/SearchInput.vue';
 import Pagination from './Components/Pagination.vue';
-import { defineProps, ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import routes from '../router';
+import { defineProps, ref, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
 
@@ -39,7 +40,7 @@ const searchDebounced = debounce(() => {
    } else {
       router.reload({
          only: ['products'], data: {
-            page: 1, 
+            page: 1,
             search: search.value,
             category: category.value,
             sort: sort.value
@@ -59,7 +60,25 @@ watch(category, () => {
 });
 
 
-/////////////////////////////////////////////////
+//agrega al carrito
+
+const addToCart = (id) => {
+   console.log(id)
+   router.post(routes.cart.create(id),
+      {
+         search: search.value,
+         category: category.value,
+         sort: sort.value
+      },
+      {
+         onSuccess: () => {
+            alert('Product added to cart');
+         },
+         preserveScroll: true,
+         preserveState: true
+      }
+   );
+};
 
 </script>
 
@@ -94,7 +113,7 @@ watch(category, () => {
             <section class="md:col-span-3">
                <div>
                   <SearchInput v-model:searchValue="search" />
-                  
+
                   <select v-model="sort" class="border p-2 mb-4 rounded">
                      <option value="rel">Relevante</option>
                      <option value="lPrice">Precio: Más barato</option>
@@ -118,14 +137,18 @@ watch(category, () => {
                         <div class="p-2">
                            <h2 class="text-sm font-semibold text-gray-800 mb-1">{{ product.name }}</h2>
                            <p class="text-gray-500 text-xs mb-1">{{ product.description }}</p>
-                           <div v-if="product.price_offer"  class="flex items-center justify-between mb-2">
-                              <span v-if="product.type.id == 1" class="text-gray-800 font-bold text-xs">Unidad: $<p class="line-through">{{ product.old_price }}</p></span>
-                              <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg: $<p class="line-through">{{ product.old_price }}</p></span>
+                           <div v-if="product.price_offer" class="flex items-center justify-between mb-2">
+                              <span v-if="product.type.id == 1" class="text-gray-800 font-bold text-xs">Unidad: $<p
+                                    class="line-through">{{ product.old_price }}</p></span>
+                              <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg: $<p
+                                    class="line-through">{{ product.old_price }}</p></span>
                               <span class="text-green-600 font-bold text-xs">Oferta: ${{ product.price_offer }}</span>
                            </div>
                            <div v-else class="flex items-center justify-between mb-2">
-                              <span v-if="product.type.id == 1" class="text-gray-800 font-bold text-xs">Unidad: ${{ product.unit_price }}</span>
-                              <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg: ${{ product.unit_price }}</span>
+                              <span v-if="product.type.id == 1" class="text-gray-800 font-bold text-xs">Unidad: ${{
+                                 product.unit_price }}</span>
+                              <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg: ${{
+                                 product.unit_price }}</span>
                               <span v-if="product.bulk_unit_price" class="text-gray-800 font-bold text-xs">Bulto: ${{
                                  product.bulk_unit_price }}</span>
                            </div>
@@ -136,7 +159,7 @@ watch(category, () => {
                      </div>
 
                      <div class="p-2 mt-auto">
-                        <button @click="addToCart(product)"
+                        <button @click="addToCart(product.id)"
                            class="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors">
                            Añadir
                         </button>
