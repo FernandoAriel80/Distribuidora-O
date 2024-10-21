@@ -30,6 +30,7 @@ class Product extends Model
         'description',
         'bulk_unit_price',
         'unit_price',
+        'bulk_unit',
         'percent_off',
         'offer',
         'price_offer',
