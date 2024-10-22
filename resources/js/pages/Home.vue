@@ -23,6 +23,7 @@ const props = defineProps({
    sortOrder: String
 });
 
+const unit_bulk = ref();
 //search
 const search = ref(props.searchTerm || '');
 const category = ref(props.categoryTerm || '');
@@ -62,9 +63,9 @@ watch(category, () => {
 
 //agrega al carrito
 
-const addToCart = (id) => {
+const addToCart = (id,type) => {
    console.log(id)
-   router.post(routes.cart.create(id),
+   router.post(routes.cart.create(id,type),
       {
          search: search.value,
          category: category.value,
@@ -157,9 +158,19 @@ const addToCart = (id) => {
                            </div>
                         </div>
                      </div>
-
+                     
+                     <div>
+                        <label class="flex items-center text-sm">
+                           <input type="radio" v-model="unit_bulk" value="unit" class="mr-1.5 h-3 w-3" />
+                           Unidad
+                        </label>
+                        <label class="flex items-center text-sm">
+                           <input type="radio" v-model="unit_bulk" value="bulk" class="mr-1.5 h-3 w-3" />
+                           {{product.bulk_unit}}
+                        </label>
+                     </div>
                      <div class="p-2 mt-auto">
-                        <button @click="addToCart(product.id)"
+                        <button @click="addToCart(product.id,unit_bulk )"
                            class="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors">
                            Añadir
                         </button>

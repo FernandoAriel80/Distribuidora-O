@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use inertia\Inertia;
 use App\Models\Product;
+use App\Models\Cart;
 class CartController extends Controller
 {
     /**
@@ -15,7 +17,21 @@ class CartController extends Controller
         try {
         
             $cart = session()->get('cart', []);
-            //return inertia('Cart/Index', compact('cart'));
+            $cartTable = Cart::all();
+            dd($cartTable);
+            
+            foreach ($cartTable->items() as $dato) {
+                $cart[$dato->cart_id] = [
+                    "catalog_id" => $dato->catalog_id,
+                    "name" => $dato->name,
+                    "quantity" => $dato->cuantity,
+                    "price" => $dato->price,
+                    "image" => $dato->image_url
+                ];
+            }
+           
+            session()->put('cart', $cart);
+
             return Inertia::render('Cart/Index', [
                 'cart' => $cart, 
             ]);
@@ -40,21 +56,30 @@ class CartController extends Controller
     {
         try {     
             $product = Product::find($request->id);
+            $user = Auth::user();
+            $cartTable = Cart::create(['user_id' => $user->id]);
             
             $cart = session()->get('cart', []);
-            
-            if (isset($cart[$product->id])) {
+            dd($cartTable);
+            if (isset($cart[$product->id]) && isset($cart[$request->type] )) {
                 $cart[$product->id]['quantity']++;
+
+                $cartTable->items()->update([
+                    "quantity" => $cart[$product->id]['quantity'],
+                ]);
             } else {
-                $cart[$product->id] = [
+                $cartTable->items()->create([
                     "catalog_id" => $product->catalog_id,
                     "name" => $product->name,
                     "quantity" => 1,
-                    "price" => $product->unit_price ?? $product->regular_price,
+                    "price" => $request->type == 'unit' ? $product->unit_price : $product->bulk_unit_price,
                     "image" => $product->image_url
-                ];
+                ]);
             }
             //dd($cart);
+          
+
+           
 
             session()->put('cart', $cart);
    
@@ -102,11 +127,21 @@ class CartController extends Controller
                 //dd($cart[$request->id]);
                 unset($cart[$request->id]);
                 session()->put('cart', $cart);
+
+                $product = Product::findOrFail($request->id);
+                dd($product);
+                $product->delete();
             }
-            //dd($cart);
-            return redirect()->route('cart.index')->with('greet', 'El registro se agrego al carrito.');
+           
+            return back()->with('greet', 'El registro se agrego al carrito.');
         } catch (\Exception $e) {
             return back()->withErrors('Error al eliminar del carrito.');
         }
+    }
+
+    public function clearCart(Request $request)
+    {
+        $request->session()->forget('cart');
+        return back()->with('success', 'Carrito limpiado.');
     }
 }
