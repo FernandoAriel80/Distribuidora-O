@@ -57,8 +57,8 @@ class CartController extends Controller
         try {     
             $product = Product::find($request->id);
             $user = Auth::user();
+            //dd($$user->id);
             $cartTable = Cart::create(['user_id' => $user->id]);
-            
             $cart = session()->get('cart', []);
             dd($cartTable);
             if (isset($cart[$product->id]) && isset($cart[$request->type] )) {

@@ -1,3 +1,31 @@
+CREATE TABLE `users` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` varchar(255) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+
+INSERT INTO `users` (`id`, `name`,`last_name`, `email`, `email_verified_at`, `password`, `role`, `remember_token`, `created_at`, `updated_at`) VALUES
+(2,     'fernando', 'ejemplo','fer12@gmail',        NULL, '$2y$12$ZMUe6ucJb8oAJqGnUtLqGeGCwQz/c0fbjUQffWZYbJjWblAvk.McO', 'cliente',        NULL, '2024-09-04 03:19:04', '2024-09-04 03:19:04'),
+(3,     'pedro',    'ejemplo','pedro@hotmail.com',  NULL, '$2y$12$z4dWaYoshPaOknVVIlzivepyVMGu2Kg3ggrMEwAhdt7JK/rOtUU1W', 'cliente',        NULL, '2024-09-04 03:20:58', '2024-09-04 03:20:58'),
+(4,     'maria',    'ejemplo','mari@gmail.com',     NULL, '$2y$12$5U1NmXrpK9cCaXNjB.vfSu8z7Z8A2CXhJKFZRewTbQaZjcZUEWI5.', 'cliente',        NULL, '2024-09-04 03:47:42', '2024-09-04 03:47:42'),
+(5,     'flor',     'ejemplo','flor12@gmail.com',   NULL, '$2y$12$mqQGKWEhwgMGvJyoVZFUEuTWTY6PG84IsqZ/AOq6GkooXN/STQJOm', 'cliente',        NULL, '2024-09-04 06:01:17', '2024-09-04 06:01:17'),
+(7,     'pepe',     'ejemplo','pepe@gmail.com',     NULL, '$2y$12$7DpgZSq9UWgr0k0jRPtwv.du7OEF3evv3.J1EYcK41F.ekXGIT2ma', 'super_admin',    NULL, '2024-09-04 07:13:34', '2024-10-11 03:00:28'),
+(8,     'flopi',    'ejemplo','flopi11@gmail.com',  NULL, '$2y$12$rWUiFbkjXAGPRHqJczoGhumT8Bxz00UZEPza7xWMmmSjLc4OF0eEK', 'admin',          NULL, '2024-10-10 08:55:03', '2024-10-10 08:55:03'),
+(10,    'fer',      'ejemplo','fer11@gmail.com',    NULL, '$2y$12$5NiK70aqmahB/cg5e5VNSOWUcK7DMVF62Pj13YXYXawdM2pey3m02', 'cliente',        NULL, '2024-10-19 07:01:43', '2024-10-19 07:01:43'),
+(12,    'ema',      'ejemplo','ema@gmail.com',      NULL, '$2y$12$X89NBlXm3tQcQqrylvtNmOBo4Dez9/5J9JVQwSoMTBYvv.awpdik6', 'admin',          NULL, '2024-10-19 07:08:49', '2024-10-19 07:08:49');
+
+
+
+
 INSERT INTO `products` (`id`, `catalog_id`, `name`, `description`,`unit_price`,`bulk_unit_price`, `bulk_unit`, `percent_off`, `offer`, `price_offer`,`old_price`, `stock`, `image_url`, `category_id`, `type_id`, `created_at`, `updated_at`) VALUES
 (5,  111122223333, 'otro arroz',                    'es otro arroz prueba actualizado',                                         2000.00,        1900.00,    NULL,   NULL,       0,      NULL,       NULL,   0,      '/image_url/default.jpeg', 4, 1, '2024-09-12 23:52:56', '2024-10-10 08:11:54'),
 (6,  33332222,     'arroz ala 2',                   '33333333333',                                                              3000.00,        2000.00,    NULL,   NULL,       0,      NULL,       NULL,   1,      'image_url/1726175755_arroz.png', 4, 1, '2024-09-13 00:15:56', '2024-09-13 00:15:56'),

@@ -14,6 +14,7 @@ const props = defineProps({
 
 const form = useForm({
     name: props.employees.name,
+    last_name:props.employees.last_name,
     email: props.employees.email,
     password: null,
     password_confirmation: null,
@@ -39,6 +40,7 @@ const submit = () => {
             <label class="block text-3xl font-bold leading-8 text-slate-900 mb-6 text-center">Registrar</label>
             <div class="mb-6">
                 <TextInput name="Nombre" v-model="form.name" :message="form.errors.name"/>
+                <TextInput name="Apellido" v-model="form.last_name" :message="form.errors.last_name"/>
                 <TextInput name="Correo" type="email" v-model="form.email" :message="form.errors.email" />
                 <TextInput name="Contraseña" type="password" v-model="form.password" :message="form.errors.password" />
                 <TextInput name="Confirmar Contraseña" type="password" v-model="form.password_confirmation" :message="form.errors.password_confirmation" />

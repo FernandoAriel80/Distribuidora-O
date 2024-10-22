@@ -37,10 +37,9 @@ class HandleInertiaRequests extends Middleware
     {
         $cart = session()->get('cart', []);
         return array_merge(parent::share($request), [
-           /* 'auth.user' => 'Fer' ?? null, */
 
            'auth.user' => fn() => $request->user()
-           ? $request->user()->only('id', 'name','role')
+           ? $request->user()->only('id', 'name','last_name','role')
            :null,
            'cart.user' => fn() => $cart
            ?  count($cart)

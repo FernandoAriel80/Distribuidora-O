@@ -14,12 +14,14 @@ class AuthController extends Controller
         sleep(1);
         $validated = $request->validate([
             'name' => 'required|max:255',
+            'last_name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:8',
         ]);
         
         $user = User::create([
             'name' => $validated['name'],
+            'last_name' => $validated['last_name'],
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
             'role' => 'cliente',

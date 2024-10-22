@@ -49,6 +49,7 @@ class EmployeeController extends Controller
         try {
             $validated = $request->validate([
                 'name' => 'required|max:255',
+                'last_name' => 'required|max:255',
                 'email' => 'required|email|max:255|unique:users',
                 'password' => 'required|confirmed|min:8',
             ],[
@@ -60,6 +61,7 @@ class EmployeeController extends Controller
             //dd($validated);
             User::create([
                 'name' => $validated['name'],
+                'last_name' => $validated['last_name'],
                 'email' => $validated['email'],
                 'password' => bcrypt($validated['password']),
                 'role' => 'admin',
@@ -98,12 +100,14 @@ class EmployeeController extends Controller
             
             $fields = $request->validate([
                 'name' => 'max:255',
+                'last_name' => 'max:255',
                 'email' => ['email', 'max:255', Rule::unique('users')->ignore($user->id)],
                 'password' => 'nullable|confirmed|min:8',
             ]);
             
             $data = [
                 'name' => $fields['name'],
+                'last_name' => $fields['last_name'],
                 'email' => $fields['email'],
                 'role' => 'admin',
             ];

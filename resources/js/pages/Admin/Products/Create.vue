@@ -10,8 +10,9 @@ const form = useForm({
     catalog_id: null,
     name: null,
     description: null,
-    bulk_unit_price: null,
     unit_price: null,
+    bulk_unit_price: null,
+    bulk_unit:null,
     percent_off: null,
     offer: false,
     price_offer: null,
@@ -83,6 +84,7 @@ const submit = () => {
                     <TextInput name="Precio por unidad" v-model="form.unit_price" :message="form.errors.unit_price" />
                     <TextInput name="Precio unico por bulto" v-model="form.bulk_unit_price"
                         :message="form.errors.bulk_unit_price" />
+                    <TextInput name="Cantidad de unidad por bulto" v-model="form.bulk_unit" :message="form.errors.bulk_unit" />
                 </div>
                 <div v-else-if="!form.offer">
                     <TextInput name="Precio" v-model="form.unit_price" :message="form.errors.unit_price" />

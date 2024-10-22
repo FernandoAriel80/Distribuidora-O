@@ -27,8 +27,9 @@ const form = useForm({
     catalog_id: props.products.catalog_id,
     name: props.products.name,
     description: props.products.description,
-    bulk_unit_price: props.products.bulk_unit_price,
     unit_price: props.products.unit_price,
+    bulk_unit_price: props.products.bulk_unit_price,
+    bulk_unit: props.products.bulk_unit,
     percent_off: props.products.percent_off,
     offer: props.products.offer === 1 ? true : false,
     price_offer: props.products.price_offer,
@@ -90,11 +91,13 @@ const submit = () => {
                     <TextInput name="Porcentaje de descuento (no obligatorio)" v-model="form.percent_off"
                         :message="form.errors.percent_off" />
                     <TextInput name="Precio oferta" v-model="form.price_offer" :message="form.errors.price_offer" />
+                    <!-- <TextInput name="Cantidad de unidad por bulto" v-model="form.bulk_unit" :message="form.errors.bulk_unit" /> -->
                 </div>
                 <div v-else-if="(!form.offer && form.type_id == 1)">
                     <TextInput name="Precio por unidad" v-model="form.unit_price" :message="form.errors.unit_price" />
                     <TextInput name="Precio unico por bulto" v-model="form.bulk_unit_price"
                         :message="form.errors.bulk_unit_price" />
+                    <TextInput name="Cantidad de unidad por bulto" v-model="form.bulk_unit" :message="form.errors.bulk_unit" />
                 </div>
                 <div v-else-if="!form.offer">
                     <TextInput name="Precio" v-model="form.unit_price" :message="form.errors.unit_price" />
