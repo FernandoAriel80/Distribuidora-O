@@ -17,7 +17,7 @@ class CartController extends Controller
         try {
         
             $cart = session()->get('cart', []);
-            $cartTable = Cart::all();
+        /*     $cartTable = Cart::all();
             dd($cartTable);
             
             foreach ($cartTable->items() as $dato) {
@@ -29,7 +29,7 @@ class CartController extends Controller
                     "image" => $dato->image_url
                 ];
             }
-           
+            */
             session()->put('cart', $cart);
 
             return Inertia::render('Cart/Index', [
@@ -57,30 +57,57 @@ class CartController extends Controller
         try {     
             $product = Product::find($request->id);
             $user = Auth::user();
-            //dd($$user->id);
-            $cartTable = Cart::create(['user_id' => $user->id]);
+            //dd( $product);
+            //dd($user->id);
+            //dd($request->type,$product->id);
+           
             $cart = session()->get('cart', []);
-            dd($cartTable);
-            if (isset($cart[$product->id]) && isset($cart[$request->type] )) {
+            //dd($cart );
+            if (isset($cart[$product->id])) {
+                dd($cart,'if');
                 $cart[$product->id]['quantity']++;
-
+                $cartTable = Cart::findOrFail($cart[$product->id]['cart_id']);
                 $cartTable->items()->update([
                     "quantity" => $cart[$product->id]['quantity'],
                 ]);
             } else {
+                dd($cart[41]['cart_id']);
+                //$cartTable = Cart::findOrFail($cart[$product->id]['cart_id']);
+               /*   if (isset($cart[$product->id])) {
+                   
+                } else {
+                    # code...
+                }  */
+                $cartTable = Cart::create([
+                    'user_id' => $user->id
+                ]);
+                //dd($cartTable->id);
+                //dd($product->id,$product->catalog_id,$cartTable->id);
                 $cartTable->items()->create([
+                    "cart_id" => $cartTable->id,
+                    "product_id" => $product->id,
+                    "quantity" => 1,
+                    "price" => $request->type == 'unit' ? $product->unit_price : $product->bulk_unit_price,
+                ]);
+                $cart[$product->id] = [
+                    "cart_id" => $cartTable->id,
                     "catalog_id" => $product->catalog_id,
                     "name" => $product->name,
                     "quantity" => 1,
                     "price" => $request->type == 'unit' ? $product->unit_price : $product->bulk_unit_price,
                     "image" => $product->image_url
-                ]);
+                ];
+                /*  $result=$cartTable->items()->create([
+                    "catalog_id" => $product->catalog_id,
+                    "name" => $product->name,
+                    "quantity" => 1,
+                    "price" => $request->type == 'unit' ? $product->unit_price : $product->bulk_unit_price,
+                    "url_image" => $product->url_image,
+                    "cart_id" => $cartTable->id
+                ]); */
+              
             }
             //dd($cart);
-          
-
-           
-
             session()->put('cart', $cart);
    
             
@@ -128,9 +155,9 @@ class CartController extends Controller
                 unset($cart[$request->id]);
                 session()->put('cart', $cart);
 
-                $product = Product::findOrFail($request->id);
+          /*       $product = Product::findOrFail($request->id);
                 dd($product);
-                $product->delete();
+                $product->delete(); */
             }
            
             return back()->with('greet', 'El registro se agrego al carrito.');

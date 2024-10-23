@@ -38,6 +38,8 @@ const removeProduct = (id) => {
             <table class="table-auto w-full text-left">
                 <thead class="bg-gray-100">
                     <tr>
+                        <th class="px-4 py-2">ID Carrito</th>
+                        <th class="px-4 py-2">ID producto</th>
                         <th class="px-4 py-2">Imagen</th>
                         <th class="px-4 py-2">Producto</th>
                         <th class="px-4 py-2 text-center">Cantidad</th>
@@ -48,6 +50,12 @@ const removeProduct = (id) => {
                 </thead>
                 <tbody>
                     <tr v-for="(product, id) in cart" :key="id" class="border-t">
+                        <td class="px-4 py-2 text-center">
+                            {{ product.cart_id }}
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            {{ product.catalog_id }}
+                        </td>
                         <td class="px-4 py-2">
                             <img :src="`/storage/${product.image}`" alt="Imagen del producto"
                                 class="w-20 h-20 object-cover rounded-lg">

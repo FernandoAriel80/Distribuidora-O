@@ -75,7 +75,7 @@ const addToCart = (id,type) => {
       },
       {
          onSuccess: () => {
-            alert('Product added to cart');
+            //alert('Product added to cart');
          },
          preserveScroll: true,
          preserveState: true

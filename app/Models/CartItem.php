@@ -17,12 +17,10 @@ class CartItem extends Model
     protected $primarykey = 'id';
 
     protected $fillable = [
-        'catalog_id',
-        'name',
-        'cuantity',
-        'price',
-        'url_image',
         'cart_id',
+        'product_id',
+        'quantity',
+        'price',
     ];
 
 }

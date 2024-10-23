@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('cart_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('catalog_id');
-            $table->string('name');
-            $table->integer('quantity');
-            $table->decimal('price',10,2);
-            $table->string('url_image');
             $table->unsignedBigInteger('cart_id')->nullable();
+            $table->unsignedBigInteger('product_id')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->decimal('price', 10, 2)->nullable();
             $table->timestamps();
 
             // Definir llaves foráneas
             $table->foreign('cart_id')->references('id')->on('carts')->onDelete('set null');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('set null');
         });
     }
 

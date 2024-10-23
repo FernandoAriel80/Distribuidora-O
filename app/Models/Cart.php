@@ -23,6 +23,6 @@ class Cart extends Model
     protected $primarykey = 'id';
 
     protected $fillable = [
-        'usar_id',
+        'user_id',
     ];
 }
