@@ -9,7 +9,8 @@ const props = defineProps({
 
 const cartTotal = computed(() => {
     return Object.values(props.cart).reduce((total, product) => {
-        return total + product.price * product.quantity;
+        //return total + product.price * product.bulk_unit * product.quantity;
+        return product.type == 'bulk' ? total + product.price * product.bulk_unit * product.quantity : total + product.price * product.quantity
     }, 0);
 });
 
@@ -74,7 +75,7 @@ const removeProduct = (id) => {
                             ${{ product.price }}
                         </td>
                         <td class="px-4 py-2 text-right">
-                            ${{ product.price * product.quantity }}
+                            ${{ product.type == 'bulk' ? product.price * product.bulk_unit * product.quantity : product.price * product.quantity}}
                         </td>
                         <td class="px-4 py-2 text-center">
                             <button @click="removeProduct(id)"

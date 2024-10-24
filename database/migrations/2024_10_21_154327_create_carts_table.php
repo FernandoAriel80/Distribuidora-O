@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->integer('quantity')->nullable();
-            $table->integer('catalog_id')->nullable();
             $table->string('type')->nullable();
             $table->timestamps();
 

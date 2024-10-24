@@ -88,7 +88,7 @@ const addToCart = (id, type) => {
          }
       );
    }), 1000;
-  // clearTimeout(timeoutId.value);
+   // clearTimeout(timeoutId.value);
 };
 
 /////
@@ -156,9 +156,19 @@ const addToCart = (id, type) => {
                            <div v-if="product.offer" class="flex items-center justify-between mb-2">
                               <span v-if="product.type.id == 1" class="text-gray-800 font-bold text-xs">Unidad: $<p
                                     class="line-through">{{ product.old_price }}</p></span>
+
                               <span v-if="product.type.id == 2" class="text-gray-800 font-bold text-xs">Kg: $<p
                                     class="line-through">{{ product.old_price }}</p></span>
-                              <span class="text-green-600 font-bold text-xs">Oferta: ${{ product.price_offer }}</span>
+
+                              <div>
+
+                                 <span class="text-green-600 font-bold text-xs">
+                                    Oferta Unidad: ${{ product.price_offer }}
+                                 </span>
+                                 <span class="text-green-600 font-bold text-xs">
+                                    Oferta por Bulto: ${{ product.bulk_unit_price }}
+                                 </span>
+                              </div>
                            </div>
                            <div v-else class="flex items-center justify-between mb-2">
                               <span v-if="product.type.id == 1" class="text-gray-800 font-bold text-xs">Unidad: ${{
@@ -177,15 +187,16 @@ const addToCart = (id, type) => {
                      <div v-if="product.type.id == 1">
                         <label class="flex items-center text-sm">
                            <input type="radio" v-model="product.catalog_id" value="unit" class="mr-1.5 h-3 w-3" />
-                           1
+                           1x Unidad
                         </label>
                         <label class="flex items-center text-sm">
                            <input type="radio" v-model="product.catalog_id" value="bulk" class="mr-1.5 h-3 w-3" />
-                           {{ product.bulk_unit }}
+                           {{ product.bulk_unit }}x Bulto
                         </label>
                      </div>
                      <div class="p-2 mt-auto">
-                        <button @click="addToCart(product.id, isNumber(product.catalog_id) ? 'unit' : product.catalog_id)"
+                        <button
+                           @click="addToCart(product.id, isNumber(product.catalog_id) ? 'unit' : product.catalog_id)"
                            class="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors">
                            Añadir
                         </button>

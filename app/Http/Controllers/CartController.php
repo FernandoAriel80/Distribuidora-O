@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use inertia\Inertia;
 use App\Models\Product;
 use App\Models\Cart;
+
+use function PHPUnit\Framework\isEmpty;
+
 class CartController extends Controller
 {
     /**
@@ -17,19 +20,23 @@ class CartController extends Controller
         try {
         
             $cart = session()->get('cart', []);
-        /*     $cartTable = Cart::all();
-            dd($cartTable);
-            
-            foreach ($cartTable->items() as $dato) {
-                $cart[$dato->cart_id] = [
-                    "catalog_id" => $dato->catalog_id,
-                    "name" => $dato->name,
-                    "quantity" => $dato->cuantity,
-                    "price" => $dato->price,
-                    "image" => $dato->image_url
+    
+            $cartTable = Cart::with([ 'product'])->get();
+            /* unset($cart[20]);
+            session()->put('cart', $cart);  */
+            foreach ($cartTable as $dato) {
+                $cart[$dato->product->id.$dato->type] = [
+                    'cart_id' => $dato->id,
+                    'catalog_id' => $dato->product->catalog_id,
+                    'name' => $dato->product->name,
+                    'quantity' => $dato->quantity,
+                    'price' => $dato->type == 'unit' ? $dato->product->unit_price : $dato->product->bulk_unit_price,
+                    'image' => $dato->product->image_url,
+                    'type' => $dato->type,
+                    'bulk_unit' => $dato->product->bulk_unit,
+                    'stock' => $dato->product->stock,
                 ];
-            }
-            */
+            }     
             session()->put('cart', $cart);
 
             return Inertia::render('Cart/Index', [
@@ -129,14 +136,15 @@ class CartController extends Controller
 
         try {
             $cart = session()->get('cart', []);
+             
             if (isset($cart[$request->id])) {
-            /*     $cartItem = Cart::where('catalog_id','=',$cart[$request->id]['catalog_id'])
-                ->where( 'user_id', '=', $cart[$request->id]['user_id'] )
-                ->firstOrFail();
-                dd($cartItem);
-                 $cartItem ->delete();  */
-                unset($cart[$request->id]);
-                session()->put('cart', $cart);
+                $cartItem = Cart::findOrFail($cart[$request->id]['cart_id']);
+                
+                if ($cartItem) {
+                    unset($cart[$request->id]);
+                    session()->put('cart', $cart);
+                    $cartItem->delete();         
+                }
             }
            
             return back()->with('greet', 'El producto se elimino del carrito.');

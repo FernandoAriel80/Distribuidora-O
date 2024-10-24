@@ -18,6 +18,7 @@ class Cart extends Model
     {
         return $this->belongsTo(Product::class);
     }
+   
 
     protected $table = 'carts';
     protected $primarykey = 'id';
@@ -25,7 +26,6 @@ class Cart extends Model
     protected $fillable = [
         'user_id',
         'product_id',
-        'catalog_id',
         'quantity',
         'type',
     ];
