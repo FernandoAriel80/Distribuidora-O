@@ -57,61 +57,41 @@ class CartController extends Controller
         try {     
             $product = Product::find($request->id);
             $user = Auth::user();
-            //dd( $product);
-            //dd($user->id);
-            //dd($request->type,$product->id);
-           
             $cart = session()->get('cart', []);
-            //dd($cart );
-            if (isset($cart[$product->id])) {
-                dd($cart,'if');
-                $cart[$product->id]['quantity']++;
-                $cartTable = Cart::findOrFail($cart[$product->id]['cart_id']);
-                $cartTable->items()->update([
-                    "quantity" => $cart[$product->id]['quantity'],
+            $current_cart_id = $product->id.$request->type;
+
+            if (isset($cart[$current_cart_id])) {
+                $cart[$current_cart_id]['quantity']++;
+                $cartTable = Cart::findOrFail($cart[$current_cart_id]['cart_id']);
+                $cartTable->update([
+                    'quantity' => $cart[$current_cart_id]['quantity'],
                 ]);
             } else {
-                dd($cart[41]['cart_id']);
-                //$cartTable = Cart::findOrFail($cart[$product->id]['cart_id']);
-               /*   if (isset($cart[$product->id])) {
-                   
-                } else {
-                    # code...
-                }  */
+
                 $cartTable = Cart::create([
-                    'user_id' => $user->id
+                    'user_id' => $user->id,
+                    'product_id' => $product->id,
+                    'catalog_id' => $product->catalog_id,
+                    'quantity' => 1,
+                    'type' => $request->type,
                 ]);
-                //dd($cartTable->id);
-                //dd($product->id,$product->catalog_id,$cartTable->id);
-                $cartTable->items()->create([
-                    "cart_id" => $cartTable->id,
-                    "product_id" => $product->id,
-                    "quantity" => 1,
-                    "price" => $request->type == 'unit' ? $product->unit_price : $product->bulk_unit_price,
-                ]);
-                $cart[$product->id] = [
-                    "cart_id" => $cartTable->id,
-                    "catalog_id" => $product->catalog_id,
-                    "name" => $product->name,
-                    "quantity" => 1,
-                    "price" => $request->type == 'unit' ? $product->unit_price : $product->bulk_unit_price,
-                    "image" => $product->image_url
+
+                $cart[$product->id.$request->type] = [
+                    'cart_id' => $cartTable->id,
+                    'catalog_id' => $product->catalog_id,
+                    'name' => $product->name,
+                    'quantity' => 1,
+                    'price' => $request->type == 'unit' ? $product->unit_price : $product->bulk_unit_price,
+                    'image' => $product->image_url,
+                    'type' => $request->type,
+                    'bulk_unit' => $product->bulk_unit,
+                    'stock' => $product->stock,
                 ];
-                /*  $result=$cartTable->items()->create([
-                    "catalog_id" => $product->catalog_id,
-                    "name" => $product->name,
-                    "quantity" => 1,
-                    "price" => $request->type == 'unit' ? $product->unit_price : $product->bulk_unit_price,
-                    "url_image" => $product->url_image,
-                    "cart_id" => $cartTable->id
-                ]); */
-              
             }
-            //dd($cart);
+
             session()->put('cart', $cart);
-   
-            
-            return redirect()->route('home.index')->with('greet', 'El registro se agrego al carrito.');
+
+            return back()->with('greet', 'El registro se agregó al carrito.');
         } catch (\Exception $e) {
             return back()->withErrors('Error al crear carrito.');
         }
@@ -146,21 +126,20 @@ class CartController extends Controller
      */
     public function destroy(Request $request)
     {
-        //dd($request->id);
+
         try {
             $cart = session()->get('cart', []);
-            //dd($cart);
             if (isset($cart[$request->id])) {
-                //dd($cart[$request->id]);
+            /*     $cartItem = Cart::where('catalog_id','=',$cart[$request->id]['catalog_id'])
+                ->where( 'user_id', '=', $cart[$request->id]['user_id'] )
+                ->firstOrFail();
+                dd($cartItem);
+                 $cartItem ->delete();  */
                 unset($cart[$request->id]);
                 session()->put('cart', $cart);
-
-          /*       $product = Product::findOrFail($request->id);
-                dd($product);
-                $product->delete(); */
             }
            
-            return back()->with('greet', 'El registro se agrego al carrito.');
+            return back()->with('greet', 'El producto se elimino del carrito.');
         } catch (\Exception $e) {
             return back()->withErrors('Error al eliminar del carrito.');
         }

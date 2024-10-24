@@ -43,6 +43,7 @@ const removeProduct = (id) => {
                         <th class="px-4 py-2">Imagen</th>
                         <th class="px-4 py-2">Producto</th>
                         <th class="px-4 py-2 text-center">Cantidad</th>
+                        <th class="px-4 py-2 text-center">Disponible</th>
                         <th class="px-4 py-2 text-right">Precio</th>
                         <th class="px-4 py-2 text-right">Total</th>
                         <th class="px-4 py-2 text-center">Acciones</th>
@@ -61,10 +62,13 @@ const removeProduct = (id) => {
                                 class="w-20 h-20 object-cover rounded-lg">
                         </td>
                         <td class="px-4 py-2">
-                            <span class="font-semibold">{{ product.name }}</span>
+                            <span class="font-semibold">{{ product.type == 'unit'? product.name+' (x1)' : product.name+' (x'+product.bulk_unit+')'  }}</span>
                         </td>
                         <td class="px-4 py-2 text-center">
                             {{ product.quantity }}
+                        </td>
+                        <td class="px-4 py-2 text-center">
+                            {{ product.stock == 1? 'si': 'no' }}
                         </td>
                         <td class="px-4 py-2 text-right">
                             ${{ product.price }}

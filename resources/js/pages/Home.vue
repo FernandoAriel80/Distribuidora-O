@@ -63,31 +63,44 @@ watch(category, () => {
 
 
 //agrega al carrito
+const message = ref('');
 
-const addToCart = (id,type) => {
+const addToCart = (id, type) => {
    console.log(id)
    console.log(type)
-   router.post(routes.cart.create(id,type),
-      {
-         search: search.value,
-         category: category.value,
-         sort: sort.value
-      },
-      {
-         onSuccess: () => {
-            //alert('Product added to cart');
+
+   setTimeout(() => {
+      //message.value = 'Mensaje actualizado después de 3 segundos';
+
+      router.post(routes.cart.create(id, type),
+         {
+            search: search.value,
+            category: category.value,
+            sort: sort.value
          },
-         preserveScroll: true,
-         preserveState: true
-      }
-   );
+         {
+            onSuccess: () => {
+               //alert('Product added to cart');
+               message.value = ' ';
+            },
+            preserveScroll: true,
+            preserveState: true
+         }
+      );
+   }), 1000;
+  // clearTimeout(timeoutId.value);
 };
+
+/////
 
 </script>
 
 <template>
 
    <Head title="Inicio" />
+   <!-- <p v-if="$page.props.flash.greet" class="p-4 bg-yellow-200">{{ $page.props.flash.greet }}</p> -->
+   <p>{{ message = $page.props.flash.greet }}</p>
+
    <div class="container mx-auto p-4">
       <h1 class="text-2xl font-bold mb-4 text-gray-800">Productos Disponibles</h1>
       <div class="container mx-auto p-4">
@@ -160,19 +173,19 @@ const addToCart = (id,type) => {
                            </div>
                         </div>
                      </div>
-                     
-                     <div v-if="product.type.id == 1" >
+
+                     <div v-if="product.type.id == 1">
                         <label class="flex items-center text-sm">
                            <input type="radio" v-model="product.catalog_id" value="unit" class="mr-1.5 h-3 w-3" />
                            1
                         </label>
                         <label class="flex items-center text-sm">
                            <input type="radio" v-model="product.catalog_id" value="bulk" class="mr-1.5 h-3 w-3" />
-                           {{product.bulk_unit}}
+                           {{ product.bulk_unit }}
                         </label>
                      </div>
                      <div class="p-2 mt-auto">
-                        <button @click="addToCart(product.id, isNumber(product.catalog_id)? 'unit':product.catalog_id )"
+                        <button @click="addToCart(product.id, isNumber(product.catalog_id) ? 'unit' : product.catalog_id)"
                            class="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded-lg text-xs font-semibold transition-colors">
                            Añadir
                         </button>

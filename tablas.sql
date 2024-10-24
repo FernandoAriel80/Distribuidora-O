@@ -74,5 +74,3 @@ INSERT INTO `products` (`id`, `catalog_id`, `name`, `description`,`unit_price`,`
 (41, 33332,        'ultra oferta de arroz',         'ultra oferta de arroz ultra oferta de arroz ultra oferta de arroz',        1000.00,        NULL,       NULL,   30,         1,      100.00,     NULL,   1,      'image_url/default.jpeg', 4, 1, '2024-10-19 07:22:28', '2024-10-19 07:34:47');
 
 
---carrito 
--- id id_user catalog_id name quantity price url_image cart_id
