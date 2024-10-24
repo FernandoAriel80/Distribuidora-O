@@ -1,4 +1,5 @@
 <script setup>
+
 import { ref, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 import routes from '../../router';
@@ -9,26 +10,44 @@ const props = defineProps({
 
 const cartTotal = computed(() => {
     return Object.values(props.cart).reduce((total, product) => {
-        //return total + product.price * product.bulk_unit * product.quantity;
         return product.type == 'bulk' ? total + product.price * product.bulk_unit * product.quantity : total + product.price * product.quantity
     }, 0);
 });
 
 const removeProduct = (id) => {
-   /*  router.post(routes.cart.delete(id), {
+    router.delete(routes.cart.delete(id), {
         onSuccess: () => {
-            router.reload();
-        }
-    }); */
-    console.log(id);
-    router.delete(routes.cart.delete(id), {  
-            onSuccess: () => {
-            },
-            onError: (error) => {
-                console.error(error);
-            },
-        });
+        },
+        onError: (error) => {
+            console.error(error);
+        },
+    });
 };
+
+////////////////////////
+
+const increaseQuantity = (id,quantity) => {
+    quantity++;
+    updateQuantity(id,quantity);
+}
+
+const decreaseQuantity = (id,quantity) => {
+    if (quantity > 1) {
+        quantity--;
+        updateQuantity(id,quantity);
+    }
+}
+
+const updateQuantity = (id,quantity) => {
+    const verifica = quantity < 1 ? 1 : quantity;
+    router.put(routes.cart.update(id,verifica),
+        {
+            onSuccess: () => {
+               console.log('cambio valor quantity');
+            },         
+        }
+    )
+}
 </script>
 <template>
 
@@ -63,19 +82,35 @@ const removeProduct = (id) => {
                                 class="w-20 h-20 object-cover rounded-lg">
                         </td>
                         <td class="px-4 py-2">
-                            <span class="font-semibold">{{ product.type == 'unit'? product.name+' (x1)' : product.name+' (x'+product.bulk_unit+')'  }}</span>
+                            <span class="font-semibold">{{ product.type == 'unit' ? product.name + ' (x1)' :
+                                product.name + '(x' + product.bulk_unit + ')' }}</span>
                         </td>
                         <td class="px-4 py-2 text-center">
-                            {{ product.quantity }}
+                            <div class="flex items-center space-x-2">
+                                <button @click="decreaseQuantity(id,product.quantity)"
+                                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded-l-lg"
+                                    :disabled="product.quantity === 1">
+                                    -
+                                </button>
+                                <input type="number" v-model="product.quantity" min="1"
+                                    class="w-12 text-center border border-gray-300 rounded-md"
+                                    @change="updateQuantity(id,product.quantity)" 
+                                    />
+                                <button @click="increaseQuantity(id,product.quantity)"
+                                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded-r-lg">
+                                    +
+                                </button>
+                            </div>
                         </td>
                         <td class="px-4 py-2 text-center">
-                            {{ product.stock == 1? 'si': 'no' }}
+                            {{ product.stock == 1 ? 'si' : 'no' }}
                         </td>
                         <td class="px-4 py-2 text-right">
                             ${{ product.price }}
                         </td>
                         <td class="px-4 py-2 text-right">
-                            ${{ product.type == 'bulk' ? product.price * product.bulk_unit * product.quantity : product.price * product.quantity}}
+                            ${{ product.type == 'bulk' ? product.price * product.bulk_unit * product.quantity :
+                                product.price * product.quantity }}
                         </td>
                         <td class="px-4 py-2 text-center">
                             <button @click="removeProduct(id)"
@@ -97,3 +132,17 @@ const removeProduct = (id) => {
         </div>
     </div>
 </template>
+
+<style scoped>
+/* Para navegadores basados en WebKit (Chrome, Safari, etc.) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Para Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+</style>

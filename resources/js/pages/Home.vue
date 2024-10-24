@@ -187,11 +187,11 @@ const addToCart = (id, type) => {
                      <div v-if="product.type.id == 1">
                         <label class="flex items-center text-sm">
                            <input type="radio" v-model="product.catalog_id" value="unit" class="mr-1.5 h-3 w-3" />
-                           1x Unidad
+                           x1 Unidad
                         </label>
                         <label class="flex items-center text-sm">
                            <input type="radio" v-model="product.catalog_id" value="bulk" class="mr-1.5 h-3 w-3" />
-                           {{ product.bulk_unit }}x Bulto
+                           x{{ product.bulk_unit }} Bulto
                         </label>
                      </div>
                      <div class="p-2 mt-auto">

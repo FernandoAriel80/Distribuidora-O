@@ -23,6 +23,7 @@ export default {
     cart:{
         index:'/cart',
         create:(id,type)=>`/cart/create/${id}/${type}`,
+        update:(id,data)=>`/cart/update/${id}/${data}`,
         delete:(id) => `/cart/${id}`,
     }
 };

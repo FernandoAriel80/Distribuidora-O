@@ -22,8 +22,6 @@ class CartController extends Controller
             $cart = session()->get('cart', []);
     
             $cartTable = Cart::with([ 'product'])->get();
-            /* unset($cart[20]);
-            session()->put('cart', $cart);  */
             foreach ($cartTable as $dato) {
                 $cart[$dato->product->id.$dato->type] = [
                     'cart_id' => $dato->id,
@@ -38,7 +36,7 @@ class CartController extends Controller
                 ];
             }     
             session()->put('cart', $cart);
-
+            
             return Inertia::render('Cart/Index', [
                 'cart' => $cart, 
             ]);
@@ -123,9 +121,25 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        try {
+            $cart = session()->get('cart', []);
+
+            if (isset($cart[$request->id])) {
+                $current_quantity = $request->data < 1? 1 : $request->data;
+                $cart[$request->id]['quantity'] = $current_quantity;
+
+                $cartTable = Cart::findOrFail($cart[$request->id]['cart_id']);
+                $cartTable->update([
+                    'quantity' => $current_quantity,
+                ]);
+            }
+
+            return back()->with('greet', 'El registro se actualizar.');
+        } catch (\Exception $e) {
+            return back()->withErrors('Error al actualizar cantidad.');
+        }
     }
 
     /**
