@@ -1,5 +1,4 @@
 <script setup>
-
 import { ref, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 import routes from '../../router';
@@ -26,33 +25,36 @@ const removeProduct = (id) => {
 
 ////////////////////////
 
-const increaseQuantity = (id,quantity) => {
+const increaseQuantity = (id, quantity) => {
     quantity++;
-    updateQuantity(id,quantity);
+    updateQuantity(id, quantity);
 }
 
-const decreaseQuantity = (id,quantity) => {
+const decreaseQuantity = (id, quantity) => {
     if (quantity > 1) {
         quantity--;
-        updateQuantity(id,quantity);
+        updateQuantity(id, quantity);
     }
 }
 
-const updateQuantity = (id,quantity) => {
+const updateQuantity = (id, quantity) => {
     const verifica = quantity < 1 ? 1 : quantity;
-    router.put(routes.cart.update(id,verifica),
+    router.put(routes.cart.update(id, verifica),
         {
             onSuccess: () => {
-               console.log('cambio valor quantity');
-            },         
+                console.log('cambio valor quantity');
+            },
         }
     )
 }
+
 </script>
 <template>
-
+   
     <Head title="Carrito" />
+
     <div>
+        
         <h1 class="text-2xl font-bold mb-4">Carrito de Compra</h1>
         <div v-if="Object.keys(cart).length > 0" class="bg-white shadow-md rounded-lg p-4">
             <table class="table-auto w-full text-left">
@@ -87,16 +89,15 @@ const updateQuantity = (id,quantity) => {
                         </td>
                         <td class="px-4 py-2 text-center">
                             <div class="flex items-center space-x-2">
-                                <button @click="decreaseQuantity(id,product.quantity)"
+                                <button @click="decreaseQuantity(id, product.quantity)"
                                     class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded-l-lg"
                                     :disabled="product.quantity === 1">
                                     -
                                 </button>
                                 <input type="number" v-model="product.quantity" min="1"
                                     class="w-12 text-center border border-gray-300 rounded-md"
-                                    @change="updateQuantity(id,product.quantity)" 
-                                    />
-                                <button @click="increaseQuantity(id,product.quantity)"
+                                    @change="updateQuantity(id, product.quantity)" />
+                                <button @click="increaseQuantity(id, product.quantity)"
                                     class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-3 rounded-r-lg">
                                     +
                                 </button>
@@ -130,6 +131,7 @@ const updateQuantity = (id,quantity) => {
         <div v-else class="bg-gray-100 p-6 text-center rounded-lg shadow-md">
             <h3 class="text-lg font-semibold text-gray-700">Tu carrito está vacío</h3>
         </div>
+        
     </div>
 </template>
 

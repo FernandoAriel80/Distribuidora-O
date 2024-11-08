@@ -43,9 +43,7 @@ class HandleInertiaRequests extends Middleware
            'auth.user' => fn() => $request->user()
            ? $request->user()->only('id', 'name','last_name','role')
            :null,
-           'cart.user' => fn() => $cart
-           ?  count($cart)
-           :null,
+           'cart.user' => fn() => count($cart),
            'flash' =>[
                'greet' => fn()=> $request->session()->get('greet')
            ]

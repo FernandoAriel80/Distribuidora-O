@@ -1,6 +1,19 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
+import { router } from '@inertiajs/vue3';
 import routes from '../router';
+
+const props = defineProps({
+    cart: Object
+});
+
+const cart_quantity = ref(0);
+
+for (let clave in props.cart) {
+    cart_quantity.value++;
+}
+
 </script>
 
 <template>
@@ -14,10 +27,9 @@ import routes from '../router';
                     <Link :href="routes.home">Inicio</Link>
                     <h1 class="title"> {{ $page.props.auth.user.name }}</h1>
                     <Link :href="routes.cart.index" class="bg-blue-500 text-white ">
-                    <div>
-                        {{ $page.props.cart.user != null ? $page.props.cart.user : '0' }}  Carrito
+                    <div @click="actualza">
+                         {{ $page.props.cart.user != null ? $page.props.cart.user : cart_quantity }} Carrito
                     </div>
-                   
                     </Link>
                     <Link :href="routes.auth.logout" method="post" as="button" type="button" class="nav-link"> Cerrar
                     Sesión</Link>

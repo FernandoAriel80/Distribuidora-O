@@ -1,5 +1,4 @@
 <script setup>
-import Layout from '../Layout/Layout.vue';
 import SearchInput from './Components/SearchInput.vue';
 import Pagination from './Components/Pagination.vue';
 import routes from '../router';
@@ -8,7 +7,6 @@ import { router } from '@inertiajs/vue3';
 import { debounce } from 'lodash';
 import { isNumber } from 'lodash';
 
-defineOptions({ layout: Layout });
 
 const props = defineProps({
    products: {
@@ -96,7 +94,7 @@ const addToCart = (id, type) => {
 </script>
 
 <template>
-
+ 
    <Head title="Inicio" />
    <!-- <p v-if="$page.props.flash.greet" class="p-4 bg-yellow-200">{{ $page.props.flash.greet }}</p> -->
    <p>{{ message = $page.props.flash.greet }}</p>

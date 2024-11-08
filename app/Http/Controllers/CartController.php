@@ -8,8 +8,6 @@ use inertia\Inertia;
 use App\Models\Product;
 use App\Models\Cart;
 
-use function PHPUnit\Framework\isEmpty;
-
 class CartController extends Controller
 {
     /**

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 // public routes
 Route::inertia('/', 'Home')->name('home');
+Route::inertia('/Layout/Layout', 'Layout')->name('layout');
 Route::get('/',[HomeController::class,'index'])->name('home.index');
 
 Route::middleware('guest')->group(function(){
